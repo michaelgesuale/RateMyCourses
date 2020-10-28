@@ -1,4 +1,8 @@
 const express = require('express')
+const pgp = require('pg-promise')({})
+const config = require('../../config')
+
+const db = pgp(config.db)
 
 const {
   body,
@@ -6,12 +10,17 @@ const {
 	validationResult
 } = require('express-validator');
 
-// Connect to DB here 
-
-
+// Run Queries here 
 exports.test = [
   async function(req, res, next) {
-	res.status(200).send('API GOOD');
+	db.task(async t => {	
+		const result = await t.any(`SELECT * FROM university;`, []);
+		
+		return result
+	}).then (result => {
+		res.status(200).json(result);
+	}).catch(e => {res.status(500); res.send(e)})
+	
   }
 ];
 
