@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS prereq (
 
 CREATE TABLE IF NOT EXISTS reviews (
     review_id SERIAL PRIMARY KEY,
-    courses_id SERIAL REFERENCES courses(course_id) ON DELETE CASCADE,
+    course_id SERIAL REFERENCES courses(course_id) ON DELETE CASCADE,
     user_id text REFERENCES users(username) ON DELETE CASCADE,
     user_comment text,
     workload int NOT NULL,
