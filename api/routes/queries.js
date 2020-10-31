@@ -1,11 +1,8 @@
 const express = require('express')
-const pgp = require('pg-promise')({})
-const config = require('../../config')
-
-const db = pgp(config.db)
+const db = require('../config')
 
 const {
-  body,
+	body,
 	param,
 	validationResult
 } = require('express-validator');
@@ -14,7 +11,7 @@ const {
 exports.test = [
   async function(req, res, next) {
 	db.task(async t => {	
-		const result = await t.any(`SELECT * FROM university;`, []);
+		const result = await t.one(`SELECT * FROM university;`, []);
 		
 		return result
 	}).then (result => {
