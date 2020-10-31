@@ -5,7 +5,7 @@ exports.main_page = [
         const url = req.protocol + "://" + req.get('host') + api_route + "main";
         
         try {
-            res.render('pages/placeholder');
+            res.render('pages/home');
         } catch (error) {
             console.log(error.response.body);
         }
