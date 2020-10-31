@@ -1,8 +1,8 @@
-const api_route = "/api/v1/";
+const apiRoute = "/api/v1/";
 
-exports.main_page = [
+exports.mainPage = [
     async function(req, res, next) {
-        const url = req.protocol + "://" + req.get('host') + api_route + "main";
+        const url = req.protocol + "://" + req.get('host') + apiRoute + "main";
         
         try {
             res.render('pages/home');
