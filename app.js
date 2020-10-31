@@ -23,6 +23,9 @@ app.use(
   })
 );
 
+// JS and CSS files
+app.use(express.static(path.join(__dirname, '/public')));
+
 // Main paths
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
