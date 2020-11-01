@@ -1,23 +1,27 @@
 const express = require('express')
-const pgp = require('pg-promise')({})
-const config = require('../../config')
-
-const db = pgp(config.db)
+const db = require('../config')
 
 const {
-  body,
+	body,
 	param,
 	validationResult
 } = require('express-validator');
 
-// DB Queries
+//DB Queries
 const getCourse = `SELECT * FROM courses WHERE course_id = $1`
 const getReviews = `SELECT * FROM reviews WHERE course_id = $1`
 const getPrereq = `SELECT * FROM prereq, courses WHERE prereq.course_id = $1 AND courses.course_id = prereq.require;`
 
-const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING review_id;`
-
 // Run Queries here 
+exports.test = [
+	async function(req, res, next) {
+		result = {
+				  test: "API working"
+				 }
+		res.status(200).json(result);
+	}
+];
+
 exports.getCourseInfo = [
 	param('course_id')
 	.exists()
@@ -41,7 +45,6 @@ exports.getCourseInfo = [
 		const reviewResults = await t.any(getReviews, [req.params.course_id]);
 		const prereqResults = await t.any(getPrereq, [req.params.course_id]);
 
-		
 		result = {
 			  course: courseResult,
 			  reviews: reviewResults,
