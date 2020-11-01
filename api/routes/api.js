@@ -7,7 +7,10 @@ const db = require('./queries');
 router.route('/test')
     .get(db.test)
 
-router.route('/v1/course/:course_id')
+router.route('/course/:course_id')
     .get(db.getCourseInfo)
+    
+router.route('/reviews')
+    .post(db.postReview)
 
 module.exports = router;
