@@ -81,7 +81,7 @@ render() {
 			content={
 				<React.Fragment>
 					<div>Hello{props.user ? ' ' + props.user.name : ''}</div>
-				<p>{this.state.data.name}</p>
+				<p>{this.state.data.test}</p>
 <Button variant="contained" color="primary">    Primary</Button>
 <Button variant="contained">Default</Button>			
 	</React.Fragment>}/>
