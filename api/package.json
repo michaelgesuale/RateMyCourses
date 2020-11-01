@@ -4,16 +4,22 @@
   "description": "Web App for finding courses",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www"
   },
   "license": "ISC",
   "dependencies": {
-    "ejs": "~2.6.1",
+    "@material-ui/core": "latest",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "express-session": "^1.17.0",
     "express-validator": "^6.4.0",
     "jquery": "^3.4.1",
+    "morgan": "~1.9.1",
     "pg-promise": "10.4.3",
-    "dotenv": "^8.2.0"
+    "react": "latest",
+    "react-dom": "latest",
+    "react-scripts": "latest"
   }
 }

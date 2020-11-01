@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS likes (
 CREATE TABLE IF NOT EXISTS prereq (
     course_id SERIAL REFERENCES courses(course_id) ON DELETE CASCADE,
     require SERIAL REFERENCES courses(course_id) ON DELETE CASCADE,
-    PRIMARY KEY(course_id, prereq)
+    PRIMARY KEY(course_id, require)
 );
 
 CREATE TABLE IF NOT EXISTS reviews (
