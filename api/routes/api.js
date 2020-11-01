@@ -5,7 +5,7 @@ const db = require('./queries');
 
 //API routes go here 
 
-router.route('/v1/test')
+router.route('/test')
     .get(db.test)
 
 
