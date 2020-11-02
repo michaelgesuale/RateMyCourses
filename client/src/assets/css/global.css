@@ -1,13 +1,16 @@
+/* Global styles */
+
 * {
     margin: 0;
     padding: 0;
+    text-decoration: none;
 }
 
 body {
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
 }
 
-.button {
+.MuiButtonBase-root.button {
     display: block;
     -webkit-appearance: none;
     outline: none;
@@ -16,7 +19,8 @@ body {
     cursor: pointer;
     border-radius: 3px;
     box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.1), 0px 4px 5px 0px rgba(0,0,0,0.07), 0px 1px 10px 0px rgba(0,0,0,0.06);
-    font-family: Roboto;
+    font-family: Raleway;
+    text-transform: none;
 }
 
 .button--dark {
@@ -27,13 +31,62 @@ body {
     border-radius: 50%;
 }
 
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    display: block;
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    width: 28px;
+    height: auto;
+    pointer-events: none;
+}
+
+.search-input {
+    display: block;
+    height: 46px;
+    width: 550px;
+    outline: none;
+    font-size: 24px;
+    border-radius: 23px;
+    border: none;
+    padding-left: 50px;
+    padding-right: 20px;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    letter-spacing: 0.5px;
+    font-family: Roboto;
+}
+
+/* Header component styles */
+
 .header-container {
-    width: 100vw;
-    height: 100px;
+    width: 100%;
+    height: 64px;
     background-color: #747ce0;
     display: flex;
     box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
     position: relative;
+    justify-content: center;
+}
+
+.header-container .search-icon {
+    left: 12px;
+    top: 18px;
+    width: 28px;
+}
+
+.header-container .search-input {
+    margin-top: 13px;
+    height: 38px;
+    width: calc(60vw - 400px);
+    font-size: 22px;
+    padding-left: 50px;
+    padding-right: 20px;
 }
 
 .header-title {
@@ -41,7 +94,7 @@ body {
     color: white;
     letter-spacing: 4px;
     font-family: Raleway;
-    font-size: 54px;
+    font-size: 36px;
     text-transform: uppercase;
 }
 
@@ -49,7 +102,7 @@ body {
     display: flex;
     height: 100%;
     align-items: center;
-    left: 24px;
+    left: 18px;
     position: absolute;
 }
 
@@ -69,45 +122,16 @@ body {
     position: absolute;
 }
 
-.header-search-container {
-    position: relative;
-}
-
-.header-search-icon {
-    display: block;
-    position: absolute;
-    left: 12px;
-    top: 10px;
-    width: 28px;
-    height: auto;
-    pointer-events: none;
-}
-
-.header-search-input {
-    display: block;
-    height: 46px;
-    width: 400px;
-    outline: none;
-    font-size: 24px;
-    border-radius: 23px;
-    border: none;
-    padding-left: 50px;
-    padding-right: 20px;
-    box-sizing: border-box;
-    text-overflow: ellipsis;
-    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
-}
-
-.header-button {
-    margin-left: 22px;
-    padding: 12px 0px;
-    width: 120px;
-    font-size: 18px;
-    text-transform: uppercase;
+.MuiButtonBase-root.header-button {
+    margin-left: 18px;
+    padding: 6px 0px;
+    width: 100px;
+    font-size: 16px;
 }
 
 .header-icon-container {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
@@ -116,13 +140,203 @@ body {
 .header-catalog-icon,
 .header-heart-icon,
 .header-user-icon {
-    width: 52px;
+    margin: 0 7px;
+    width: 44px;
     height: auto;
     fill: white;
 }
 
-.header-heart-icon,
-.header-user-icon {
-    margin-left: 19px;
+.header-icon-container:hover .header-icon-text {
+    opacity: 1;
+}
 
+.header-icon-text {
+    pointer-events: none;
+    display: inline-block;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+    background-color: rgba(0,0,0,0.5);
+    padding: 6px;
+    font-size: 14px;
+    color: white;
+    text-align: center;
+    position: absolute;
+    top: 54px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 3px;
+    font-family: Roboto;
+    letter-spacing: 0.4px;
+}
+
+/* Courses component styles */
+
+.courses-top-container {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 40px;
+}
+
+.courses-total-count {
+    color: #737070;
+    font-size: 24px;
+    font-family: Raleway;
+    line-height: 42px;
+}
+
+.courses-sort-container {
+
+}
+
+.MuiButtonBase-root.courses-sort-button {
+    position: relative;
+    padding: 8px 28px;
+    padding-right: 48px;
+    font-size: 20px;
+}
+
+.MuiButtonBase-root.courses-sort-button svg {
+    width: 30px;
+    height: auto;
+    position: absolute;
+    top: 10px;
+}
+
+.courses-item {
+    display: flex;
+    flex-direction: column;
+    margin-top: 36px;
+    margin-right: 32px;
+}
+
+.courses-item-name-container {
+    display: flex;
+}
+
+.courses-item-name {
+    color: #747ce0;
+    font-size: 36px;
+    font-family: Raleway;
+}
+
+.courses-item-rating {
+    margin-left: 36px;
+}
+
+.courses-container .MuiRating-iconFilled > .MuiSvgIcon-root,
+.courses-container .MuiRating-iconEmpty > .MuiSvgIcon-root {
+    width: 40px;
+    height: auto;
+    fill: #747ce0;
+}
+
+.courses-item-campus {
+    margin: 10px 0;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 24px;
+    font-family: Raleway
+}
+
+.courses-item-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    letter-spacing: 0.4px;
+    color: #737070;
+    font-size: 18px;
+    font-family: Raleway
+}
+
+#sort-menu .MuiPaper-root {
+    margin-top: 53px;
+    width: 146px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+}
+
+#sort-menu .MuiPaper-root .MuiButtonBase-root {
+    font-family: Raleway;
+}
+
+/* Filters component styles */
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 24px;
+}
+
+.filter-item {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group {
+    color: #747ce0;
+    font-size: 30px;
+    font-family: Raleway;
+    margin-bottom: 8px;
+}
+
+.filter-item .MuiTypography-root {
+    font-size: 16px;
+    font-family: Raleway;
+}
+
+.filter-item .MuiButtonBase-root {
+    padding: 2px 9px;
+}
+
+/* Home page styles */
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 64px);
+}
+
+.home-header {
+    font-size: 64px;
+    font-family: Raleway;
+    font-weight: 100;
+    letter-spacing: 4px;
+    color: #747ce0;
+    margin-bottom: 8px;
+}
+
+.MuiButtonBase-root.home-search-button {
+    margin-top: 24px;
+    border: 1px solid #747ce0;
+    font-size: 18px;
+}
+
+.MuiButtonBase-root.home-catalog-button {
+    margin-top: 15vh;
+    background-color: #747ce0;
+    color: #ffffff;
+    font-size: 24px;
+    width: 300px;
+}
+
+/* Catalog page styles */
+
+.catalog-container {
+    display: flex;
+}
+
+.catalog-left-container {
+    width: 250px;
+}
+
+.catalog-right-container {
+    width: calc(100% - 250px);
+    box-sizing: border-box;
+    padding-top: 36px;
+    border-left: 2px solid #bec3ff;
+    padding-left: 36px;
+    min-height: calc(100vh - 64px);
 }
