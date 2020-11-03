@@ -67,7 +67,7 @@ export default class Courses extends React.Component {
                             <div className="courses-item-name-container">
                                 <span className="courses-item-name">{ course.name }</span>
                                 <div className="courses-item-rating">
-                                    <Rating name="read-only" value={ course.overall_rating } readOnly precision={0.5}
+                                    <Rating name="half-rating-read" value={ parseFloat(course.overall_rating) } readOnly precision={0.1}
                                             emptyIcon={<StarBorderIcon fontSize="inherit" />}/>
                                 </div>
                             </div>

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS courses (
     description text NOT NULL,
     year int NOT NULL,
     subject text NOT NULL,
-    overall_rating int NOT NULL DEFAULT 0,
+    overall_rating numeric NOT NULL DEFAULT 0,
     CONSTRAINT rating_check CHECK (0 <= overall_rating AND overall_rating <= 5)
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     enjoyment int NOT NULL,
     difficulty int NOT NULL,
     usefulness int NOT NULL,
-    overall int NOT NULL,
+    overall numeric NOT NULL,
     likes int NOT NULL DEFAULT 0,
     PRIMARY KEY(course_id, user_id),
     CONSTRAINT rating_check CHECK (0 <= workload AND workload <= 5 AND 0 <= enjoyment AND enjoyment <= 5 AND 0 <= difficulty AND difficulty <= 5 AND 0 <= usefulness AND usefulness <= 5 AND 0 <= overall AND overall <= 5)
@@ -60,9 +60,14 @@ CREATE TABLE IF NOT EXISTS reviews (
 CREATE OR REPLACE FUNCTION update_course_rating()
   RETURNS trigger AS
 $$
+DECLARE
+    reviews_count integer;
+
 BEGIN
-    IF EXISTS (SELECT * FROM reviews WHERE course_id = NEW.course_id) THEN
-	UPDATE courses SET overall_rating = (overall_rating + NEW.overall) / 2 WHERE course_id = NEW.course_id;
+    SELECT COUNT(*) INTO reviews_count FROM reviews WHERE course_id = NEW.course_id;
+	
+    IF reviews_count > 0 THEN
+	UPDATE courses SET overall_rating = (overall_rating + NEW.overall) / (reviews_count + 1) WHERE course_id = NEW.course_id;
     ELSE
 	UPDATE courses SET overall_rating = NEW.overall WHERE course_id = NEW.course_id;
     END IF;
