@@ -8,11 +8,14 @@ const {
 } = require('express-validator');
 
 //DB Queries
-const getCourse = `SELECT * FROM courses WHERE course_id = $1`
-const getReviews = `SELECT * FROM reviews WHERE course_id = $1`
+const getCourse = `SELECT * FROM courses WHERE course_id = $1;`
+const getReviews = `SELECT * FROM reviews WHERE course_id = $1;`
 const getPrereq = `SELECT * FROM prereq, courses WHERE prereq.course_id = $1 AND courses.course_id = prereq.require;`
 
-const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING review_id;`
+const getAllCourses = `SELECT courses.name, campus.name as campus, courses.description, courses.overall_rating
+				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
+	
+const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, user_id;`
 	
 // Run Queries here 
 exports.test = [
@@ -128,12 +131,32 @@ exports.postReview = [
 
 		return await t.one(insertReview, [req.body.course_id , req.body.user_id, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
 	}).then (result => {
-     	   if ('review_id' in result) {
+	   console.log(result)
+	
+     	   if ('course_id' in result && 'user_id' in result) {
           	res.status(200).end();
        	 } else {
 		// return 400 if unsuccessful
         	res.status(400).send('Unable to create the review');
        	 }
-	}).catch(e => {res.status(500); console.log(e); res.send(e)})
+	}).catch(e => {
+		console.log(e); 
+		
+		if (e.code == 23505) {
+			res.status(403).send("Review already submitted");
+		} else {
+			res.status(500).send("Interal Error");
+		}
+	})
+  }
+];
+
+exports.getCourses = [
+	async function(req, res, next) {
+		db.task(async t => {
+		return await t.any(getAllCourses, [req.params.course_id]);
+	}).then (result => {
+		res.status(200).json(result);
+	}).catch(e => {res.status(500); res.send(e)})
   }
 ];
