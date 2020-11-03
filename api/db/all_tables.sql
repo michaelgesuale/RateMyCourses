@@ -67,7 +67,7 @@ BEGIN
     SELECT COUNT(*) INTO reviews_count FROM reviews WHERE course_id = NEW.course_id;
 	
     IF reviews_count > 0 THEN
-	UPDATE courses SET overall_rating = (overall_rating + NEW.overall) / (reviews_count + 1) WHERE course_id = NEW.course_id;
+	UPDATE courses SET overall_rating = (overall_rating * reviews_count + NEW.overall) / (reviews_count + 1) WHERE course_id = NEW.course_id;
     ELSE
 	UPDATE courses SET overall_rating = NEW.overall WHERE course_id = NEW.course_id;
     END IF;
