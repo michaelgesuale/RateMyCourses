@@ -10,6 +10,9 @@ router.route('/test')
 router.route('/course/:course_id')
     .get(db.getCourseInfo)
     
+router.route('/courses')
+    .get(db.getCourses)
+    
 router.route('/reviews')
     .post(db.postReview)
 
