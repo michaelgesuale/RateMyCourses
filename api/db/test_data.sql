@@ -10,10 +10,10 @@ INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC207', 
 INSERT INTO users(email, username, password) VALUES ('test@test.com', 'test', '123456');
 INSERT INTO users(email, username, password) VALUES ('newUser', 'newUser', 'newUser');
 
-INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test', 'REVIEW', 4, 4, 4, 4, 4);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test', 'REVIEW', 4, 4, 4, 4, 4);
 
-INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (2, 'test', 'REVIEW', 1, 1, 1, 1, 1);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (2, 'test', 'REVIEW', 1, 1, 1, 1, 1);
 
-INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (3, 'test', 'REVIEW', 3, 3, 3, 3, 3);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (3, 'test', 'REVIEW', 3, 3, 3, 3, 3);
 
-INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (4, 'test', 'REVIEW', 5, 5, 5, 5, 5);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (4, 'test', 'REVIEW', 5, 5, 5, 5, 5);

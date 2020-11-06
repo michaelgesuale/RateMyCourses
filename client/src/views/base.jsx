@@ -17,7 +17,7 @@ export class Base extends React.Component {
     handleLogin() {
         const user = {
             id: 0,
-            name: 'Sally'
+            name: 'newUser'
         }
         this.setState({ user });
     }

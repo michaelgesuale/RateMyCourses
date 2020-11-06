@@ -15,7 +15,7 @@ const getPrereq = `SELECT * FROM prereq, courses WHERE prereq.course_id = $1 AND
 const getAllCourses = `SELECT courses.name, campus.name as campus, courses.description, courses.overall_rating
 				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 	
-const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, user_id;`
+const insertReview = `INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, username;`
 	
 // Run Queries here 
 exports.test = [
@@ -72,7 +72,7 @@ exports.postReview = [
 	.withMessage('Invalid Course Id Parameter')
 	.bail()
 	.escape(),
-	body('user_id')
+	body('username')
 	.exists()
 	.withMessage('Missing User Id Parameter')
 	.bail()
@@ -129,11 +129,11 @@ exports.postReview = [
 		db.task(async t => {	
 		overall = (parseInt(req.body.workload) + parseInt(req.body.enjoyment) + parseInt(req.body.difficulty) + parseInt(req.body.usefulness)) / 4
 
-		return await t.one(insertReview, [req.body.course_id , req.body.user_id, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
+		return await t.one(insertReview, [req.body.course_id , req.body.username, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
 	}).then (result => {
 	   console.log(result)
 	
-     	   if ('course_id' in result && 'user_id' in result) {
+     	   if ('course_id' in result && 'username' in result) {
           	res.status(200).end();
        	 } else {
 		// return 400 if unsuccessful

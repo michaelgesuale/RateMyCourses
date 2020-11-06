@@ -15,7 +15,9 @@ export class CoursePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            data: null,
+            course: null,
+            reviews: null,
+            prerequisites: null,
             loved: false,
             helpful: false,
             showReviewPopup: false,
@@ -27,8 +29,12 @@ export class CoursePage extends React.Component {
 		};
     }
 
-	componentDidMount() { 
-		
+	componentDidMount() {
+		fetch(`http://localhost:3000/api/course/1`) //${this.props.course_id}`)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq})
+            }).catch(error => console.log(error));
     }
 
     toggleReviewPopup() {
@@ -46,6 +52,14 @@ export class CoursePage extends React.Component {
         this.setState({ helpful });
     }
 
+    updateCourseReviews() {
+        fetch(`http://localhost:3000/api/course/1`) //${this.props.course_id}`)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({reviews: data.reviews})
+            }).catch(error => console.log(error));
+    }
+
 	handleReviewSubmit() {
 		fetch('http://localhost:3000/api/reviews', {
 			method: 'POST',
@@ -54,8 +68,8 @@ export class CoursePage extends React.Component {
 			},
 			body: new URLSearchParams(
 				{
-					course_id: 0,
-					user_id: this.props.user.id,
+					course_id: 1, //this.props.course_id,
+					username: this.props.user.name,
 					user_comment: this.state.reviewComment,
 					workload: this.state.reviewWorkload,
 					enjoyment: this.state.reviewEnjoyment,
@@ -66,6 +80,7 @@ export class CoursePage extends React.Component {
 		}).then(response => {
             this.setState({ showReviewPopup: false });
             this.setState({ data: response });
+            this.updateCourseReviews();
         }).catch(error => {
             console.log(error);
             this.setState({ showReviewPopup: false });
@@ -73,19 +88,11 @@ export class CoursePage extends React.Component {
     }
 
 	render() {
-
-    	const course = {
-			name: 'CSC490',
-			campus: 'University of Toronto Mississauga',
-			description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu tellus ac mi auctor dictum. Nunc nec ligula est. Morbi sollicitudin ipsum a turpis consequat consequat. Duis volutpat, urna a commodo imperdiet, libero libero lacinia lectus, quis scelerisque enim sapien non libero. Aliquam at lorem et tellus aliquet blandit. Suspendisse lacinia accumsan dui, eget convallis quam pulvinar id. Pellentesque convallis tempor imperdiet. Praesent imperdiet ultrices orci, quis imperdiet magna venenatis ac. Pellentesque sagittis mi orci, et varius mauris iaculis non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque at mauris ut risus sodales consectetur. Mauris dictum ultricies leo, hendrerit auctor erat auctor in. Ut ullamcorper pulvinar felis, et pulvinar ante laoreet ac.',
-			year: '2020',
-            subject: 'CSC',
-            prerequisites: [
-                'CSC490',
-                'CSC491',
-                'CSC492'
-            ]
-		}
+        const {
+            course,
+            reviews,
+            prerequisites
+        } = this.state;
 
 		const overallRating = {
 			overall: 1,
@@ -95,29 +102,25 @@ export class CoursePage extends React.Component {
 			usefulness: 1
 		}
 
-		const reviews = [
-            {
-                userName: 'Joe',
-                userComment: 'I like this course!',
-                overall: 4,
-                workload: 3,
-                enjoyment: 5,
-                difficulty: 3,
-                usefulness: 5,
-                helpful: 2
-            }
-        ]
-
         const sortValues = [
             'Overall rating',
             'Helpfulness',
             'Most recent'
         ]
 
-
+        if (this.state.course == null) {
+            return <DefaultLayout
+                    { ...this.props }
+                    hideSearch={ true }
+                    content={
+                        <div className="catalog-container">
+                            <h2>LOADING</h2>
+                        </div>
+                    }
+            />
+        }
 		return <DefaultLayout 
 				{ ...this.props }
-				hideSearch={ true }
 				content={
 					<div className="course-container">
                         <div className="course-name-container">
@@ -145,18 +148,17 @@ export class CoursePage extends React.Component {
                                 <LabelRating label="Workload rating" rating={ overallRating.workload }></LabelRating>
                             </div>
                             <div className="course-description-container">
-                                { course.prerequisites.length && (
-                                    <div className="course-prerequisites-container">
+                                { <div className="course-prerequisites-container">
                                         <span className="course-prerequisites-title">Prerequisites:</span>
                                         {
-                                            course.prerequisites.map((prerequisite, index) => {
+                                            prerequisites.map((prerequisite, index) => {
                                                 return <Link className="course-prerequisite" to={`/course/${ prerequisite }`} key={ prerequisite }>
-                                                    {`${ prerequisite }${ index < course.prerequisites.length - 1 ? ',' : ''}`}
+                                                    {`${ prerequisite }${ index < prerequisites.length - 1 ? ',' : ''}`}
                                                 </Link>
                                             })
                                         }
                                     </div>
-                                )}
+                                }
                                 <span className="course-description">{ course.description }</span>
                             </div>
                         </div>
@@ -179,7 +181,7 @@ export class CoursePage extends React.Component {
                                             <div className="course-review-user-container">
                                                 <div className="course-review-user">
                                                     <PersonIcon className="course-review-user-icon"/>
-                                                    <span className="course-review-user-name">{ review.userName }</span>
+                                                    <span className="course-review-user-name">{ review.username }</span>
                                                 </div>
                                                 <div className="course-review-rating">
                                                     <LabelRating label="Overall rating" rating={ review.overall }></LabelRating>
@@ -190,9 +192,9 @@ export class CoursePage extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="course-review-body-container">
-                                                <span className="course-review-body">{ review.userComment }</span>
+                                                <span className="course-review-body">{ review.user_comment }</span>
                                                 <div className="course-review-helpful-container">
-                                                <span className="course-review-helpful-text">{`${ review.helpful + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
+                                                <span className="course-review-helpful-text">{`${ review.likes + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
                                                 {
                                                     this.props.user && (
                                                         <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick()}>
