@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { DefaultLayout } from '../layouts/default';
 import { LabelRating } from './../components/labelRating';
 import { SortButton } from './../components/sortButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -101,7 +102,7 @@ export class CoursePage extends React.Component {
                     hideSearch={ true }
                     content={
                         <div className="catalog-container">
-                            <h2>LOADING</h2>
+                            <CircularProgress color="primary" />
                         </div>
                     }
             />
