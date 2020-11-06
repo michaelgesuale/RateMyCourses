@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/header';
+import { Header } from '../components/header';
 import '../assets/css/global.css';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -15,16 +15,12 @@ const theme = createMuiTheme({
 });
 
 
-export default class DefaultLayout extends React.Component {
+export class DefaultLayout extends React.Component {
 	render() {
 		return (
 			<ThemeProvider theme={theme}>
-				<Header
-					user={ this.props.user }
-					hideSearch={ this.props.hideSearch }
-				/>
+				<Header {...this.props}/>
 				{ this.props.content }
-			
 			</ThemeProvider>
 		);
 	}
