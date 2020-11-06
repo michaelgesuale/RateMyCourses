@@ -156,7 +156,7 @@ exports.postReview = [
 exports.getCourses = [
 	async function(req, res, next) {
 		db.task(async t => {
-		return await t.any(getAllCourses, [req.params.course_id]);
+		return await t.any(getAllCourses);
 	}).then (result => {
 		res.status(200).json(result);
 	}).catch(e => {res.status(500); res.send(e)})
