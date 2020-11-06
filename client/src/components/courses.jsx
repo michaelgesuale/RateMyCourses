@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { Link } from 'react-router-dom';
 
 export default class Courses extends React.Component {
 
@@ -65,7 +66,9 @@ export default class Courses extends React.Component {
                     return (
                         <div className="courses-item" key={ course.name }>
                             <div className="courses-item-name-container">
-                                <span className="courses-item-name">{ course.name }</span>
+                                <Link to="/course_page">
+                                    <span className="courses-item-name">{ course.name }</span>
+                                </Link>
                                 <div className="courses-item-rating">
                                     <Rating name="half-rating-read" value={ parseFloat(course.overall_rating) } readOnly precision={0.1}
                                             emptyIcon={<StarBorderIcon fontSize="inherit" />}/>
