@@ -16,7 +16,9 @@ const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as ca
 				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 	
 const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, user_id;`
-	
+const searchCoursesByName = `SELECT name, campus, description, overall_rating FROM courses 
+	WHERE name = $1;`
+
 // Run Queries here 
 exports.test = [
 	async function(req, res, next) {
@@ -155,6 +157,23 @@ exports.getCourses = [
 	async function(req, res, next) {
 		db.task(async t => {
 		return await t.any(getAllCourses);
+	}).then (result => {
+		res.status(200).json(result);
+	}).catch(e => {res.status(500); res.send(e)})
+  }
+];
+
+exports.searchCoursesByName = [
+	param('course_name')
+	.exists()
+	.withMessage('Missing Course Name Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	async function(req, res, next) {
+		db.task(async t => {
+		const nameForQuery = req.params.course_name.toUpperCase().replace(/\s+/g, '')
+		return await t.any(searchCoursesByName, [nameForQuery]);
 	}).then (result => {
 		res.status(200).json(result);
 	}).catch(e => {res.status(500); res.send(e)})
