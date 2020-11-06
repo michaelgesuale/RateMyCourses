@@ -20,7 +20,7 @@ export class LabelRating extends React.Component {
                         <span className="rating-label">{ label }</span>
                     )
                 }
-                <Rating name={ this.props.label }value={ parseFloat( rating ) } readOnly={ this.props.onClick ? false : true }  precision={0.1}
+                <Rating name={ this.props.label }value={ parseFloat( rating ) } readOnly={ this.props.onClick ? false : true }  precision={1}
                         emptyIcon={<StarBorderIcon fontSize="inherit"/>}
                         onChange={(event, newValue) => {
                             this.props.onClick(newValue)
