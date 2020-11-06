@@ -9,13 +9,13 @@ const {
 
 //DB Queries
 const getCourse = `SELECT courses.name, campus.name as campus_name, description, year, subject, overall_rating, overall_workload, overall_enjoyment, overall_difficulty, overall_usefulness FROM courses, campus WHERE courses.campus = camp_id AND courses.course_id = $1;`
-const getReviews = `SELECT user_id as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, likes as helpful FROM reviews WHERE course_id = $1;`
+const getReviews = `SELECT username as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, likes as helpful FROM reviews WHERE course_id = $1;`
 const getPrereq = `SELECT courses.course_id, courses.name FROM prereq, courses WHERE courses.course_id = prereq.require AND prereq.course_id = $1;`
 
 const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as campus, courses.description, courses.overall_rating
 				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 	
-const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, user_id;`
+const insertReview = `INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, username;`
 const searchCoursesByName = `SELECT courses.name, campus.name as campus, courses.description, courses.overall_rating
 	FROM courses, campus WHERE courses.campus = campus.camp_id AND courses.name = $1 ORDER BY overall_rating DESC;`
 
@@ -74,7 +74,7 @@ exports.postReview = [
 	.withMessage('Invalid Course Id Parameter')
 	.bail()
 	.escape(),
-	body('user_id')
+	body('username')
 	.exists()
 	.withMessage('Missing User Id Parameter')
 	.bail()
@@ -131,11 +131,11 @@ exports.postReview = [
 		db.task(async t => {	
 		overall = (parseInt(req.body.workload) + parseInt(req.body.enjoyment) + parseInt(req.body.difficulty) + parseInt(req.body.usefulness)) / 4
 
-		return await t.one(insertReview, [req.body.course_id , req.body.user_id, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
+		return await t.one(insertReview, [req.body.course_id , req.body.username, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
 	}).then (result => {
 	   console.log(result)
 	
-     	   if ('course_id' in result && 'user_id' in result) {
+     	   if ('course_id' in result && 'username' in result) {
           	res.status(200).end();
        	 } else {
 		// return 400 if unsuccessful

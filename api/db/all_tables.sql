@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS prereq (
 
 CREATE TABLE IF NOT EXISTS reviews (
     course_id SERIAL REFERENCES courses(course_id) ON DELETE CASCADE,
-    user_id text REFERENCES users(username) ON DELETE CASCADE,
+    username text REFERENCES users(username) ON DELETE CASCADE,
     user_comment text,
     workload int NOT NULL,
     enjoyment int NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     usefulness int NOT NULL,
     overall numeric NOT NULL,
     likes int NOT NULL DEFAULT 0,
-    PRIMARY KEY(course_id, user_id),
+    PRIMARY KEY(course_id, username),
     CONSTRAINT rating_check CHECK (0 <= workload AND workload <= 5 AND 0 <= enjoyment AND enjoyment <= 5 AND 0 <= difficulty AND difficulty <= 5 AND 0 <= usefulness AND usefulness <= 5 AND 0 <= overall AND overall <= 5)
 );
 

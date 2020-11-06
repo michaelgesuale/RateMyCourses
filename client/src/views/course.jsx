@@ -12,11 +12,12 @@ import PersonIcon from '@material-ui/icons/Person';
 
 export class CoursePage extends React.Component {
 
-     constructor(props) {
-	super(props);
-	this.state = {
-            data: null,
-	    course_id: props.location.state.course_id,
+	constructor(props) {
+		super(props);
+		this.state = {
+            course: null,
+            reviews: null,
+            prerequisites: null,
             loved: false,
             helpful: false,
             showReviewPopup: false,
@@ -25,15 +26,19 @@ export class CoursePage extends React.Component {
             reviewDifficulty: 0,
             reviewWorkload: 0,
             reviewComment: ''
-	};
+		};
+    }
+    
+    updateCourseInfo() {
+        fetch(`http://localhost:3000/api/course/${this.props.location.state.course_id}`)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq})
+            }).catch(error => console.log(error));
     }
 
-    componentDidMount() { 
-	fetch(`http://localhost:3000/api/course/${this.state.course_id}`)
-		.then(response => response.json())
-		.then(data => {
-			this.setState({ data: data})
-		}).catch(error => {console.error(error)});	
+	componentDidMount() {
+		this.updateCourseInfo();
     }
 
     toggleReviewPopup() {
@@ -59,8 +64,8 @@ export class CoursePage extends React.Component {
 			},
 			body: new URLSearchParams(
 				{
-					course_id: this.state.course_id,
-					user_id: this.props.customProps.user.name,
+					course_id: this.props.location.state.course_id,
+					username: this.props.customProps.user.name,
 					user_comment: this.state.reviewComment,
 					workload: this.state.reviewWorkload,
 					enjoyment: this.state.reviewEnjoyment,
@@ -68,41 +73,39 @@ export class CoursePage extends React.Component {
 					usefulness: this.state.reviewUsefulness
 				}
 			),
-		}).then(response => {
-            this.setState({ showReviewPopup: false });    
+		}).then(() => {
+            this.setState({ showReviewPopup: false });
+            this.updateCourseInfo();
         }).catch(error => {
             console.log(error);
-	    
-
             this.setState({ showReviewPopup: false });
         });
     }
 
 	render() {
+        const {
+            course,
+            reviews,
+            prerequisites
+        } = this.state;
 
         const sortValues = [
             'Overall rating',
             'Helpfulness',
             'Most recent'
         ]
-	
-	if (this.state.data == null) {
-		return <DefaultLayout
-				{ ...this.props }
-				content={
-					<div className="catalog-container">
-						<h2>LOADING</h2>						
-					</div>
-				}
-		/>
-	}
-	
-	var course = this.state.data.course;
-	var prerequisites = this.state.data.prereq;
-	var reviews = this.state.data.reviews;
 
-
-
+        if (this.state.course == null) {
+            return <DefaultLayout
+                    { ...this.props }
+                    hideSearch={ true }
+                    content={
+                        <div className="catalog-container">
+                            <h2>LOADING</h2>
+                        </div>
+                    }
+            />
+        }
 		return <DefaultLayout 
 				{ ...this.props }
 				content={
@@ -132,8 +135,7 @@ export class CoursePage extends React.Component {
                                 <LabelRating label="Workload rating" rating={ course.overall_workload }></LabelRating>
                             </div>
                             <div className="course-description-container">
-                                {(
-                                    <div className="course-prerequisites-container">
+                                { <div className="course-prerequisites-container">
                                         <span className="course-prerequisites-title">Prerequisites:</span>
                                         {
                                             prerequisites.map((prerequisite, index) => {
@@ -148,7 +150,7 @@ export class CoursePage extends React.Component {
                                             })
                                         }
                                     </div>
-                                )}
+                                }
                                 <span className="course-description">{ course.description }</span>
                             </div>
                         </div>
