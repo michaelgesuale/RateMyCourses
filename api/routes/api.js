@@ -16,4 +16,7 @@ router.route('/courses')
 router.route('/reviews')
     .post(db.postReview)
 
+router.route('/search/:course_name')
+    .get(db.searchCoursesByName)
+
 module.exports = router;
