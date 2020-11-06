@@ -94,14 +94,6 @@ export class CoursePage extends React.Component {
             prerequisites
         } = this.state;
 
-		const overallRating = {
-			overall: 1,
-			workload: 1,
-			enjoyment: 1,
-			difficulty: 1,
-			usefulness: 1
-		}
-
         const sortValues = [
             'Overall rating',
             'Helpfulness',
@@ -138,22 +130,27 @@ export class CoursePage extends React.Component {
                                 )
                             }
                         </div>
-                        <span className="course-campus">{ course.campus }</span>
+                        <span className="course-campus">{ course.campus_name }</span>
                         <div className="course-body-container">
                             <div className="course-rating-container">
-                                <LabelRating label="Overall rating" rating={ overallRating.overall }></LabelRating>
-                                <LabelRating label="Enjoyment rating" rating={ overallRating.enjoyment }></LabelRating>
-                                <LabelRating label="Usefulness rating" rating={ overallRating.usefulness }></LabelRating>
-                                <LabelRating label="Difficulty rating" rating={ overallRating.difficulty }></LabelRating>
-                                <LabelRating label="Workload rating" rating={ overallRating.workload }></LabelRating>
+                                <LabelRating label="Overall rating" rating={ course.overall_rating }></LabelRating>
+                                <LabelRating label="Enjoyment rating" rating={ course.overall_enjoyment }></LabelRating>
+                                <LabelRating label="Usefulness rating" rating={ course.overall_usefulness }></LabelRating>
+                                <LabelRating label="Difficulty rating" rating={ course.overall_difficulty }></LabelRating>
+                                <LabelRating label="Workload rating" rating={ course.overall_workload }></LabelRating>
                             </div>
                             <div className="course-description-container">
                                 { <div className="course-prerequisites-container">
                                         <span className="course-prerequisites-title">Prerequisites:</span>
                                         {
                                             prerequisites.map((prerequisite, index) => {
-                                                return <Link className="course-prerequisite" to={`/course/${ prerequisite }`} key={ prerequisite }>
-                                                    {`${ prerequisite }${ index < prerequisites.length - 1 ? ',' : ''}`}
+                                                return <Link className="course-prerequisite" to={{
+  						pathname: `/course/${ prerequisite.name }`,
+						state: {
+    							course_id: prerequisite.course_id
+  						}
+					    }} key={ prerequisite.course_id }>
+                                                    {`${ prerequisite.name }${ index < prerequisites.length - 1 ? ',' : ''}`}
                                                 </Link>
                                             })
                                         }
@@ -181,7 +178,7 @@ export class CoursePage extends React.Component {
                                             <div className="course-review-user-container">
                                                 <div className="course-review-user">
                                                     <PersonIcon className="course-review-user-icon"/>
-                                                    <span className="course-review-user-name">{ review.username }</span>
+                                                    <span className="course-review-user-name">{ review.user_name }</span>
                                                 </div>
                                                 <div className="course-review-rating">
                                                     <LabelRating label="Overall rating" rating={ review.overall }></LabelRating>
