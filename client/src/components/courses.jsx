@@ -23,7 +23,7 @@ export class Courses extends React.Component {
         return (
             <div className="courses-container">
                 <div className="courses-top-container">
-                    <span className="courses-total-count">{ `${ total } result${ total !== 1 && 's'}` }</span>
+                    <span className="courses-total-count">{ `${ total } result${ total !== 1 ? 's' : ''}` }</span>
                     <div className="courses-sort-container">
                         <div>
                             <SortButton sortValues={sortValues}></SortButton>

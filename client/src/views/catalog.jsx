@@ -12,8 +12,24 @@ export class CatalogPage extends React.Component {
 		}
 	}
 
-	componentDidMount() { 
-		fetch('http://localhost:3000/api/courses')
+	componentDidMount() {
+		const locationState = this.props.location.state
+		console.log(locationState)
+		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
+			: 'http://localhost:3000/api/courses'
+		fetch(apiToFetch)
+			.then(response => response.json())
+			.then(data => {
+				this.setState({ data: data})
+			}).catch(error => {console.error(error)});
+	}
+
+	componentDidUpdate() {
+		const locationState = this.props.location.state
+		console.log(locationState)
+		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
+			: 'http://localhost:3000/api/courses'
+		fetch(apiToFetch)
 			.then(response => response.json())
 			.then(data => {
 				this.setState({ data: data})
@@ -72,8 +88,6 @@ export class CatalogPage extends React.Component {
 		const {
 			data
 		} = this.state;
-
-		
 		
 		var courses = [];
 
