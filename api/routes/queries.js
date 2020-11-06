@@ -9,7 +9,7 @@ const {
 
 //DB Queries
 const getCourse = `SELECT courses.name, campus.name as campus_name, description, year, subject, overall_rating, overall_workload, overall_enjoyment, overall_difficulty, overall_usefulness FROM courses, campus WHERE courses.campus = camp_id AND courses.course_id = $1;`
-const getReviews = `SELECT user_id as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, likes as helpful FROM reviews WHERE course_id = $1;`
+const getReviews = `SELECT username as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, likes as helpful FROM reviews WHERE course_id = $1;`
 const getPrereq = `SELECT courses.course_id, courses.name FROM prereq, courses WHERE courses.course_id = prereq.require AND prereq.course_id = $1;`
 
 const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as campus, courses.description, courses.overall_rating

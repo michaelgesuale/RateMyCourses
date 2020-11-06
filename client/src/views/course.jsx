@@ -28,13 +28,17 @@ export class CoursePage extends React.Component {
             reviewComment: ''
 		};
     }
-
-	componentDidMount() {
-		fetch(`http://localhost:3000/api/course/1`) //${this.props.course_id}`)
+    
+    updateCourseInfo() {
+        fetch(`http://localhost:3000/api/course/${this.props.location.state.course_id}`)
             .then(response => response.json())
             .then(data => {
                 this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq})
             }).catch(error => console.log(error));
+    }
+
+	componentDidMount() {
+		this.updateCourseInfo();
     }
 
     toggleReviewPopup() {
@@ -52,14 +56,6 @@ export class CoursePage extends React.Component {
         this.setState({ helpful });
     }
 
-    updateCourseReviews() {
-        fetch(`http://localhost:3000/api/course/1`) //${this.props.course_id}`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({reviews: data.reviews})
-            }).catch(error => console.log(error));
-    }
-
 	handleReviewSubmit() {
 		fetch('http://localhost:3000/api/reviews', {
 			method: 'POST',
@@ -68,7 +64,7 @@ export class CoursePage extends React.Component {
 			},
 			body: new URLSearchParams(
 				{
-					course_id: 1, //this.props.course_id,
+					course_id: this.props.location.state.course_id,
 					username: this.props.customProps.user.name,
 					user_comment: this.state.reviewComment,
 					workload: this.state.reviewWorkload,
@@ -77,10 +73,9 @@ export class CoursePage extends React.Component {
 					usefulness: this.state.reviewUsefulness
 				}
 			),
-		}).then(response => {
+		}).then(() => {
             this.setState({ showReviewPopup: false });
-            this.setState({ data: response });
-            this.updateCourseReviews();
+            this.updateCourseInfo();
         }).catch(error => {
             console.log(error);
             this.setState({ showReviewPopup: false });
@@ -191,7 +186,7 @@ export class CoursePage extends React.Component {
                                             <div className="course-review-body-container">
                                                 <span className="course-review-body">{ review.user_comment }</span>
                                                 <div className="course-review-helpful-container">
-                                                <span className="course-review-helpful-text">{`${ review.likes + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
+                                                <span className="course-review-helpful-text">{`${ review.helpful + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
                                                 {
                                                     this.props.customProps.user && (
                                                         <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick()}>
