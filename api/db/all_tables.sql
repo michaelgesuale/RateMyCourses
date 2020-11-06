@@ -28,7 +28,11 @@ CREATE TABLE IF NOT EXISTS courses (
     year int NOT NULL,
     subject text NOT NULL,
     overall_rating numeric NOT NULL DEFAULT 0,
-    CONSTRAINT rating_check CHECK (0 <= overall_rating AND overall_rating <= 5)
+    overall_workload numeric NOT NULL DEFAULT 0,
+    overall_enjoyment numeric NOT NULL DEFAULT 0,
+    overall_difficulty numeric NOT NULL DEFAULT 0,
+    overall_usefulness numeric NOT NULL DEFAULT 0,
+    CONSTRAINT rating_check CHECK (0 <= overall_rating AND overall_rating <= 5 AND 0 <= overall_workload AND overall_workload <= 5 AND 0 <= overall_enjoyment AND overall_enjoyment <= 5 AND 0 <= overall_difficulty AND overall_difficulty <= 5 AND 0 <= overall_usefulness AND overall_usefulness <= 5)
 );
 
 CREATE TABLE IF NOT EXISTS likes (
@@ -67,9 +71,21 @@ BEGIN
     SELECT COUNT(*) INTO reviews_count FROM reviews WHERE course_id = NEW.course_id;
 	
     IF reviews_count > 0 THEN
-	UPDATE courses SET overall_rating = (overall_rating * reviews_count + NEW.overall) / (reviews_count + 1) WHERE course_id = NEW.course_id;
+	UPDATE courses SET 
+		overall_rating = (overall_rating * reviews_count + NEW.overall) / (reviews_count + 1), 
+		overall_workload = (overall_workload * reviews_count + NEW.workload) / (reviews_count + 1), 
+		overall_enjoyment = (overall_enjoyment * reviews_count + NEW.enjoyment) / (reviews_count + 1), 
+		overall_difficulty = (overall_difficulty * reviews_count + NEW.difficulty) / (reviews_count + 1), 
+		overall_usefulness = (overall_usefulnes * reviews_count + NEW.usefulness) / (reviews_count + 1) 
+	WHERE course_id = NEW.course_id;
     ELSE
-	UPDATE courses SET overall_rating = NEW.overall WHERE course_id = NEW.course_id;
+	UPDATE courses SET 
+		overall_rating = NEW.overall, 
+		overall_workload = NEW.workload, 
+		overall_enjoyment = NEW.enjoyment, 
+		overall_difficulty = NEW.difficulty, 
+		overall_usefulness = NEW.usefulness
+	WHERE course_id = NEW.course_id;
     END IF;
 
     RETURN NEW;

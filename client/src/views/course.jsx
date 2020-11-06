@@ -12,10 +12,11 @@ import PersonIcon from '@material-ui/icons/Person';
 
 export class CoursePage extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.state = {
+     constructor(props) {
+	super(props);
+	this.state = {
             data: null,
+	    course_id: props.location.state.course_id,
             loved: false,
             helpful: false,
             showReviewPopup: false,
@@ -24,11 +25,15 @@ export class CoursePage extends React.Component {
             reviewDifficulty: 0,
             reviewWorkload: 0,
             reviewComment: ''
-		};
+	};
     }
 
-	componentDidMount() { 
-		
+    componentDidMount() { 
+	fetch(`http://localhost:3000/api/course/${this.state.course_id}`)
+		.then(response => response.json())
+		.then(data => {
+			this.setState({ data: data})
+		}).catch(error => {console.error(error)});	
     }
 
     toggleReviewPopup() {
@@ -74,50 +79,29 @@ export class CoursePage extends React.Component {
 
 	render() {
 
-    	const course = {
-			name: 'CSC490',
-			campus: 'University of Toronto Mississauga',
-			description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu tellus ac mi auctor dictum. Nunc nec ligula est. Morbi sollicitudin ipsum a turpis consequat consequat. Duis volutpat, urna a commodo imperdiet, libero libero lacinia lectus, quis scelerisque enim sapien non libero. Aliquam at lorem et tellus aliquet blandit. Suspendisse lacinia accumsan dui, eget convallis quam pulvinar id. Pellentesque convallis tempor imperdiet. Praesent imperdiet ultrices orci, quis imperdiet magna venenatis ac. Pellentesque sagittis mi orci, et varius mauris iaculis non. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque at mauris ut risus sodales consectetur. Mauris dictum ultricies leo, hendrerit auctor erat auctor in. Ut ullamcorper pulvinar felis, et pulvinar ante laoreet ac.',
-			year: '2020',
-            subject: 'CSC',
-            prerequisites: [
-                'CSC490',
-                'CSC491',
-                'CSC492'
-            ]
-		}
-
-		const overallRating = {
-			overall: 1,
-			workload: 1,
-			enjoyment: 1,
-			difficulty: 1,
-			usefulness: 1
-		}
-
-		const reviews = [
-            {
-                userName: 'Joe',
-                userComment: 'I like this course!',
-                overall: 4,
-                workload: 3,
-                enjoyment: 5,
-                difficulty: 3,
-                usefulness: 5,
-                helpful: 2
-            }
-        ]
-
         const sortValues = [
             'Overall rating',
             'Helpfulness',
             'Most recent'
         ]
-
+	
+	if (this.state.data == null) {
+		return <DefaultLayout
+				{ ...this.props }
+				content={
+					<div className="catalog-container">
+						<h2>LOADING</h2>						
+					</div>
+				}
+		/>
+	}
+	
+	var course = this.state.data.course;
+	var prerequisites = this.state.data.prereq;
+	var reviews = this.state.data.reviews;
 
 		return <DefaultLayout 
 				{ ...this.props }
-				hideSearch={ true }
 				content={
 					<div className="course-container">
                         <div className="course-name-container">
@@ -135,23 +119,28 @@ export class CoursePage extends React.Component {
                                 )
                             }
                         </div>
-                        <span className="course-campus">{ course.campus }</span>
+                        <span className="course-campus">{ course.campus_name }</span>
                         <div className="course-body-container">
                             <div className="course-rating-container">
-                                <LabelRating label="Overall rating" rating={ overallRating.overall }></LabelRating>
-                                <LabelRating label="Enjoyment rating" rating={ overallRating.enjoyment }></LabelRating>
-                                <LabelRating label="Usefulness rating" rating={ overallRating.usefulness }></LabelRating>
-                                <LabelRating label="Difficulty rating" rating={ overallRating.difficulty }></LabelRating>
-                                <LabelRating label="Workload rating" rating={ overallRating.workload }></LabelRating>
+                                <LabelRating label="Overall rating" rating={ course.overall_rating }></LabelRating>
+                                <LabelRating label="Enjoyment rating" rating={ course.overall_enjoyment }></LabelRating>
+                                <LabelRating label="Usefulness rating" rating={ course.overall_usefulness }></LabelRating>
+                                <LabelRating label="Difficulty rating" rating={ course.overall_difficulty }></LabelRating>
+                                <LabelRating label="Workload rating" rating={ course.overall_workload }></LabelRating>
                             </div>
                             <div className="course-description-container">
-                                { course.prerequisites.length && (
+                                {(
                                     <div className="course-prerequisites-container">
                                         <span className="course-prerequisites-title">Prerequisites:</span>
                                         {
-                                            course.prerequisites.map((prerequisite, index) => {
-                                                return <Link className="course-prerequisite" to={`/course/${ prerequisite }`} key={ prerequisite }>
-                                                    {`${ prerequisite }${ index < course.prerequisites.length - 1 ? ',' : ''}`}
+                                            prerequisites.map((prerequisite, index) => {
+                                                return <Link className="course-prerequisite" to={{
+  						pathname: `/course/${ prerequisite.name }`,
+						state: {
+    							course_id: prerequisite.course_id
+  						}
+					    }} key={ prerequisite.course_id }>
+                                                    {`${ prerequisite.name }${ index < prerequisites.length - 1 ? ',' : ''}`}
                                                 </Link>
                                             })
                                         }
@@ -179,7 +168,7 @@ export class CoursePage extends React.Component {
                                             <div className="course-review-user-container">
                                                 <div className="course-review-user">
                                                     <PersonIcon className="course-review-user-icon"/>
-                                                    <span className="course-review-user-name">{ review.userName }</span>
+                                                    <span className="course-review-user-name">{ review.user_name }</span>
                                                 </div>
                                                 <div className="course-review-rating">
                                                     <LabelRating label="Overall rating" rating={ review.overall }></LabelRating>
@@ -190,7 +179,7 @@ export class CoursePage extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="course-review-body-container">
-                                                <span className="course-review-body">{ review.userComment }</span>
+                                                <span className="course-review-body">{ review.user_comment }</span>
                                                 <div className="course-review-helpful-container">
                                                 <span className="course-review-helpful-text">{`${ review.helpful + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
                                                 {

@@ -8,11 +8,11 @@ const {
 } = require('express-validator');
 
 //DB Queries
-const getCourse = `SELECT * FROM courses WHERE course_id = $1;`
-const getReviews = `SELECT * FROM reviews WHERE course_id = $1;`
-const getPrereq = `SELECT * FROM prereq, courses WHERE prereq.course_id = $1 AND courses.course_id = prereq.require;`
+const getCourse = `SELECT courses.name, campus.name as campus_name, description, year, subject, overall_rating, overall_workload, overall_enjoyment, overall_difficulty, overall_usefulness FROM courses, campus WHERE courses.campus = camp_id AND courses.course_id = $1;`
+const getReviews = `SELECT user_id as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, likes as helpful FROM reviews WHERE course_id = $1;`
+const getPrereq = `SELECT courses.course_id, courses.name FROM prereq, courses WHERE courses.course_id = prereq.require AND prereq.course_id = $1;`
 
-const getAllCourses = `SELECT courses.name, campus.name as campus, courses.description, courses.overall_rating
+const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as campus, courses.description, courses.overall_rating
 				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 	
 const insertReview = `INSERT INTO reviews(course_id, user_id, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, user_id;`

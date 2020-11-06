@@ -30,7 +30,7 @@ export class Base extends React.Component {
         this.setState({ user: undefined });
     }
     
-    render() {
+    render(props) {
         const customProps = {
             user: this.state.user,
             handleLogin: () => this.handleLogin(),
@@ -40,9 +40,9 @@ export class Base extends React.Component {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route path="/course/:id"><CoursePage { ...customProps }/></Route>
-                    <Route path="/catalog"><CatalogPage {...customProps }/></Route>
-                    <Route path="/"><HomePage {...customProps }/></Route>
+                    <Route path="/course/:id" render={(props) => (<CoursePage {...props} customProps={customProps} key={props.location.state.course_id}/>)}></Route>
+                    <Route path="/catalog" render={(props) => (<CatalogPage {...props} customProps={customProps} />)}></Route>
+                    <Route path="/" render={(props) => (<HomePage {...props} customProps={customProps} />)}></Route>
                 </Switch>
             </BrowserRouter>
         )
