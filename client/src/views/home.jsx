@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import DefaultLayout from '../layouts/default';
-import Search from './../components/search';
+import { DefaultLayout } from '../layouts/default';
+import { Search } from './../components/search';
 import { Link } from 'react-router-dom';
 
-export default class HomePage extends React.Component {
+export class HomePage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -22,12 +22,6 @@ export default class HomePage extends React.Component {
 	}
 
 	render() {
-
-		var props = {
-			user: {
-				name: 'Sally'
-			}
-		}
 
 		const courses = [
 			{
@@ -70,12 +64,8 @@ export default class HomePage extends React.Component {
 			likes: 2,
 		}
 
-		const {
-			data
-		} = this.state;
-
 		return <DefaultLayout 
-				user={ props.user }
+				{ ...this.props }
 				hideSearch={ true }
 				content={
 					<div className="home-container">

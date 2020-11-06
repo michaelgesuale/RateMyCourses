@@ -1,9 +1,9 @@
 import React from 'react';
-import DefaultLayout from '../layouts/default';
-import Courses from './../components/courses';
-import Filters from './../components/filters';
+import { DefaultLayout } from '../layouts/default';
+import { Courses } from './../components/courses';
+import { Filters } from './../components/filters';
 
-export default class CatalogPage extends React.Component {
+export class CatalogPage extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -21,13 +21,6 @@ export default class CatalogPage extends React.Component {
 	}
 
 	render() {
-
-		var props = {
-			user: {
-				name: 'Sally'
-			}
-		}
-
 		var courses = [
 			{
 				name: 'CSC490',
@@ -114,8 +107,8 @@ export default class CatalogPage extends React.Component {
 		}
 
 
-		return <DefaultLayout 
-				user={ props.user }
+		return <DefaultLayout
+				{ ...this.props }
 				content={
 					<div className="catalog-container">
 						<div className="catalog-left-container">

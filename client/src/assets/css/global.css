@@ -62,6 +62,58 @@ body {
     font-family: Roboto;
 }
 
+/* LabelRating component styles */
+
+.rating-container {
+    display: flex;
+}
+
+.rating-label {
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 20px;
+    font-family: Raleway;
+    margin-right: 22px;
+    line-height: 40px;
+}
+
+.rating-label + span {
+    margin-left: auto;
+}
+
+.rating-container .MuiRating-iconFilled > .MuiSvgIcon-root,
+.rating-container .MuiRating-iconEmpty > .MuiSvgIcon-root {
+    width: 40px;
+    height: auto;
+    fill: #747ce0;
+}
+
+/* Sort Button component styles */
+
+.MuiButtonBase-root.sort-by-button {
+    position: relative;
+    padding: 8px 28px;
+    padding-right: 48px;
+    font-size: 20px;
+}
+
+.MuiButtonBase-root.sort-by-button svg {
+    width: 30px;
+    height: auto;
+    position: absolute;
+    top: 10px;
+}
+
+.sort-menu .MuiPaper-root {
+    margin-top: 53px;
+    width: 146px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+}
+
+.sort-menu .MuiPaper-root .MuiButtonBase-root {
+    font-family: Raleway;
+}
+
 /* Header component styles */
 
 .header-container {
@@ -123,7 +175,7 @@ body {
 }
 
 .MuiButtonBase-root.header-button {
-    margin-left: 18px;
+    margin-left: 16px;
     padding: 6px 0px;
     width: 100px;
     font-size: 16px;
@@ -188,20 +240,6 @@ body {
 
 }
 
-.MuiButtonBase-root.courses-sort-button {
-    position: relative;
-    padding: 8px 28px;
-    padding-right: 48px;
-    font-size: 20px;
-}
-
-.MuiButtonBase-root.courses-sort-button svg {
-    width: 30px;
-    height: auto;
-    position: absolute;
-    top: 10px;
-}
-
 .courses-item {
     display: flex;
     flex-direction: column;
@@ -223,13 +261,6 @@ body {
     margin-left: 36px;
 }
 
-.courses-container .MuiRating-iconFilled > .MuiSvgIcon-root,
-.courses-container .MuiRating-iconEmpty > .MuiSvgIcon-root {
-    width: 40px;
-    height: auto;
-    fill: #747ce0;
-}
-
 .courses-item-campus {
     margin: 10px 0;
     letter-spacing: 1px;
@@ -247,16 +278,6 @@ body {
     color: #737070;
     font-size: 18px;
     font-family: Raleway
-}
-
-#sort-menu .MuiPaper-root {
-    margin-top: 53px;
-    width: 146px;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
-}
-
-#sort-menu .MuiPaper-root .MuiButtonBase-root {
-    font-family: Raleway;
 }
 
 /* Filters component styles */
@@ -297,6 +318,9 @@ body {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 64px);
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 32px;
 }
 
 .home-header {
@@ -326,6 +350,9 @@ body {
 
 .catalog-container {
     display: flex;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 32px;
 }
 
 .catalog-left-container {
@@ -339,4 +366,311 @@ body {
     border-left: 2px solid #bec3ff;
     padding-left: 36px;
     min-height: calc(100vh - 64px);
+}
+
+/* Course page styles */
+
+.course-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 32px;
+}
+
+.course-name-container {
+    display: flex;
+    margin-top: 64px;
+}
+
+.course-name {
+    color: #747ce0;
+    font-size: 36px;
+    font-family: Raleway;
+}
+
+.course-icon-container {
+    margin-left: 36px;
+    margin-top: 4px;
+    width: 34px;
+    cursor: pointer;
+}
+
+.MuiSvgIcon-root.course-icon {
+    width: 100%;
+    height: auto;
+    fill: #747ce0;
+}
+
+.course-campus {
+    margin: 10px 0;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 24px;
+    font-family: Raleway;
+}
+
+.course-body-container {
+    margin-top: 24px;
+    display: flex;
+}
+
+.course-rating-container {
+
+}
+
+.course-description-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 80px;
+    max-width: calc(100vw - 550px);
+}
+
+.course-prerequisites-container {
+    display: flex;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.course-prerequisites-title {
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 20px;
+    font-family: Raleway;
+}
+
+.course-prerequisite {
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 24px;
+    font-family: Raleway;
+    margin-left: 6px;
+}
+
+.course-description {
+    margin-top: 8px;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 14px;
+    font-family: Raleway;
+}
+
+.course-reviews-container {
+    margin-top: 64px;
+}
+
+.course-reviews-title-container {
+    display: flex;
+}
+
+.course-reviews-title {
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 26px;
+    font-family: Raleway;
+    line-height: 70px;
+    height: 50px;
+}
+
+.course-reviews-sort-container {
+    margin-left: auto;
+    display: flex;
+}
+
+.course-reviews-title-container .course-reviews-button {
+    background-color: #747ce0;
+    color: #ffffff;
+    font-size: 18px;
+    margin-right: 18px;
+}
+
+.course-review-container {
+    display: flex;
+    border: 1px solid #737070;
+    padding: 16px;
+    margin-top: 24px;
+}
+
+.course-review-user-container {
+    display: flex;
+    flex-direction: column;
+    width: 230px;
+    margin-right: 48px;
+}
+
+.course-review-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.course-review-user > .course-review-user-icon {
+    fill: #747ce0;
+    width: 34px;
+    height: auto;
+}
+
+.course-review-user-name {
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 18px;
+    font-family: Raleway;
+}
+
+.course-review-rating {
+
+}
+
+.course-review-rating .rating-label {
+    font-size: 12px;
+    margin-right: 16px;
+    line-height: 18px;
+    margin-top: 4px;
+}
+
+.course-review-rating .rating-container .MuiRating-iconFilled > .MuiSvgIcon-root, 
+.course-review-rating .rating-container .MuiRating-iconEmpty > .MuiSvgIcon-root {
+    width: 20px;
+}
+
+.course-review-body-container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 276px);
+}
+
+.course-review-body {
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 14px;
+    font-family: Raleway;
+    margin-top: 8px;
+}
+
+.course-review-helpful-container {
+    margin-top: auto;
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+}
+
+.course-review-helpful-text {
+    margin-left: auto;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 14px;
+    font-family: Raleway;
+    height: 24px;
+}
+
+.course-review-helpful-icon-container {
+    cursor: pointer;
+}
+
+.course-review-helpful-icon-container .course-review-helpful-icon {
+    fill: #747ce0;
+    width: 36px;
+    height: auto;
+    margin-left: 12px;
+}
+
+.course-review-popup-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-height: calc(100vh - 64px);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.course-review-popup-container--hidden {
+    display: none;
+}
+
+.course-review-popup {
+    margin: 0 auto;
+    width: 90%;
+    max-width: 800px;
+    height: auto;
+    background-color: #ffffff;
+    display: flex;
+}
+
+.course-review-popup-title {
+    display: block;
+    background-color: #747ce0;
+    color: #ffffff;
+    font-size: 28px;
+    font-family: Raleway;
+    width: 90%;
+    max-width: 800px;
+    margin: 96px auto 0;
+    height: 50px;
+    box-sizing: border-box;
+    padding-left: 12px;
+    padding-top: 8px;
+}
+
+.course-review-popup-left {
+    margin: 24px;
+}
+
+.course-review-popup-left .rating-container {
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.course-review-popup-left .rating-label {
+    margin: 0;
+    padding-left: 6px;
+    padding-bottom: 4px;
+    line-height: 24px;
+}
+
+.course-review-popup-right {
+    width: calc(100% - 200px);
+    display: flex;
+    flex-direction: column;
+}
+
+.course-review-popup-right-title {
+    text-align: center;
+    margin: 22px 0 16px;
+    font-family: Raleway;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 28px;
+}
+
+.course-review-popup-textarea {
+    width: calc(100% - 96px);
+    height: 264px;
+    margin: 0 48px;
+    resize: none;
+    font-family: Raleway;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 16px;
+    box-sizing: border-box;
+    padding: 12px;
+}
+
+.course-review-popup-button-container {
+    margin: 14px 0 24px;
+    display: flex;
+}
+
+.course-review-popup .course-review-popup-close {
+    margin-left: auto;
+    font-size: 18px;
+    margin-right: 14px;
+}
+
+.course-review-popup .course-review-popup-submit {
+    background-color: #747ce0;
+    color: #ffffff;
+    font-size: 18px;
+    margin-right: 48px;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-export default class Filters extends React.Component {
+export class Filters extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -24,7 +24,6 @@ export default class Filters extends React.Component {
             if (selectedFilters.includes(name)) selectedFilters = selectedFilters.filter(val => val !== name);
             else selectedFilters.push(name);
             this.setState({ selectedFilters: selectedFilters.join(',') });
-            console.log(selectedFilters)
         }
         
         return (
