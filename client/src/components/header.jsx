@@ -18,6 +18,7 @@ export class Header extends React.Component {
             <svg className="header-user-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
         )
 
+
         return (
             <div className='header-container'> 
                 <Link to="/">
@@ -37,7 +38,7 @@ export class Header extends React.Component {
                         </Link>
                         <span className="header-icon-text">Catalog</span>
                     </div>
-                    { this.props.user ? (
+                    { this.props.customProps.user ? (
                         <React.Fragment>
                             <div className="header-icon-container">
                                 <HeartIcon/>
@@ -47,12 +48,12 @@ export class Header extends React.Component {
                                 <RecommendationIcon/>
                                 <span className="header-icon-text">Recommendations</span>
                             </div>
-                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.handleLogout}>Logout</Button>
+                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleLogout}>Logout</Button>
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.handleLogin}>Login</Button>
-                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.handleRegister}>Register</Button>
+                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleLogin}>Login</Button>
+                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleRegister}>Register</Button>
                         </React.Fragment>
                     )}
                 </div>

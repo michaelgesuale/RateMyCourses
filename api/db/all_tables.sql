@@ -76,7 +76,7 @@ BEGIN
 		overall_workload = (overall_workload * reviews_count + NEW.workload) / (reviews_count + 1), 
 		overall_enjoyment = (overall_enjoyment * reviews_count + NEW.enjoyment) / (reviews_count + 1), 
 		overall_difficulty = (overall_difficulty * reviews_count + NEW.difficulty) / (reviews_count + 1), 
-		overall_usefulness = (overall_usefulnes * reviews_count + NEW.usefulness) / (reviews_count + 1) 
+		overall_usefulness = (overall_usefulness * reviews_count + NEW.usefulness) / (reviews_count + 1) 
 	WHERE course_id = NEW.course_id;
     ELSE
 	UPDATE courses SET 

@@ -69,7 +69,7 @@ export class CoursePage extends React.Component {
 			body: new URLSearchParams(
 				{
 					course_id: 1, //this.props.course_id,
-					username: this.props.user.name,
+					username: this.props.customProps.user.name,
 					user_comment: this.state.reviewComment,
 					workload: this.state.reviewWorkload,
 					enjoyment: this.state.reviewEnjoyment,
@@ -118,7 +118,7 @@ export class CoursePage extends React.Component {
                         <div className="course-name-container">
                             <span className="course-name">{ course.name }</span>
                             {
-                                this.props.user && (
+                                this.props.customProps.user && (
                                     <div className="course-icon-container" onClick={() => this.handleLovedClick()}>
                                         { this.state.loved ? (
                                                 <FavoriteIcon className="course-icon"/>
@@ -164,7 +164,7 @@ export class CoursePage extends React.Component {
                                 <span className="course-reviews-title">Reviews</span>
                                 <div className="course-reviews-sort-container">
                                     {
-                                        this.props.user && (
+                                        this.props.customProps.user && (
                                             <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleReviewPopup()}>Leave a review</Button>
                                         )
                                     }
@@ -193,7 +193,7 @@ export class CoursePage extends React.Component {
                                                 <div className="course-review-helpful-container">
                                                 <span className="course-review-helpful-text">{`${ review.likes + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
                                                 {
-                                                    this.props.user && (
+                                                    this.props.customProps.user && (
                                                         <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick()}>
                                                             {
                                                                 this.state.helpful ? (
@@ -214,7 +214,7 @@ export class CoursePage extends React.Component {
                                 )
                             }
                         </div>
-                        <div className={`course-review-popup-container ${ !this.state.showReviewPopup || !this.props.user ? 'course-review-popup-container--hidden' : '' }`}> 
+                        <div className={`course-review-popup-container ${ !this.state.showReviewPopup || !this.props.customProps.user ? 'course-review-popup-container--hidden' : '' }`}> 
                             <span className="course-review-popup-title">Write a review</span>
                             <div className="course-review-popup">
                                 <div className="course-review-popup-left">
