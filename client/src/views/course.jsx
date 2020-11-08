@@ -101,7 +101,7 @@ export class CoursePage extends React.Component {
                     { ...this.props }
                     hideSearch={ true }
                     content={
-                        <div className="catalog-container">
+                        <div className="load-container">
                             <CircularProgress color="primary" />
                         </div>
                     }
