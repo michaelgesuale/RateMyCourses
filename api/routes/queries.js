@@ -16,7 +16,7 @@ const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as ca
 				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 	
 const insertReview = `INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, username;`
-const searchCoursesByName = `SELECT courses.name, campus.name as campus, courses.description, courses.overall_rating
+const searchCoursesByName = `SELECT courses.name, courses.course_id, campus.name as campus, courses.description, courses.overall_rating
 	FROM courses, campus WHERE courses.campus = campus.camp_id AND courses.name = $1 ORDER BY overall_rating DESC;`
 
 // Run Queries here 

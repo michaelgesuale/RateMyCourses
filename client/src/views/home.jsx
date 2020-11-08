@@ -28,10 +28,7 @@ export class HomePage extends React.Component {
 				content={
 					<div className="home-container">
 						<h2 className="home-header">Hello!</h2>
-						<Search/>
-						<Link to="/catalog">
-							<Button className="home-search-button button" variant="contained" color="secondary">Search for your course</Button>
-						</Link>
+						<Search isHomepage={true}/>
 						<Link to="/catalog">
 							<Button className="home-catalog-button button" variant="contained" color="primary">Browse our catalog!</Button>
 						</Link>

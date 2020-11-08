@@ -14,7 +14,6 @@ export class CatalogPage extends React.Component {
 
 	componentDidMount() {
 		const locationState = this.props.location.state
-		console.log(locationState)
 		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
 			: 'http://localhost:3000/api/courses'
 		fetch(apiToFetch)
@@ -24,9 +23,11 @@ export class CatalogPage extends React.Component {
 			}).catch(error => {console.error(error)});
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate(prevProps, prevState) {
 		const locationState = this.props.location.state
-		console.log(locationState)
+		if (prevProps.location.state === locationState) {
+			return
+		}
 		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
 			: 'http://localhost:3000/api/courses'
 		fetch(apiToFetch)
