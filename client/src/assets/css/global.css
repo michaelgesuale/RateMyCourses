@@ -371,14 +371,14 @@ body {
     font-weight: 100;
     letter-spacing: 2px;
     color: #747ce0;
-    margin-bottom: 8px;
 }
 
 .register-form,
 .login-form {
     display: flex;
     flex-direction: column;
-    padding: 12px;
+    padding: 20px;
+    width: 20%;
 }
 
 .MuiButtonBase-root.register-button,
