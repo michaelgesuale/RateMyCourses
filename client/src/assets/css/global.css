@@ -81,11 +81,15 @@ body {
     margin-left: auto;
 }
 
-.rating-container .MuiRating-iconFilled > .MuiSvgIcon-root,
+.rating-container .MuiRating-iconFilled > .MuiSvgIcon-root {
+    width: 40px;
+    height: auto;
+    color: #747ce0;
+}
+
 .rating-container .MuiRating-iconEmpty > .MuiSvgIcon-root {
     width: 40px;
     height: auto;
-    fill: #747ce0;
 }
 
 /* Sort Button component styles */
@@ -344,6 +348,56 @@ body {
     color: #ffffff;
     font-size: 24px;
     width: 300px;
+}
+
+/* Login/register page styles */
+
+.register-container,
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 64px);
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 32px;
+}
+
+.register-header,
+.login-header {
+    font-size: 30px;
+    font-family: Raleway;
+    font-weight: 100;
+    letter-spacing: 2px;
+    color: #747ce0;
+    margin-bottom: 8px;
+}
+
+.register-form,
+.login-form {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.MuiButtonBase-root.register-button,
+.MuiButtonBase-root.login-button {
+    margin-top: vh;
+    margin-bottom: 3vh;
+    background-color: #747ce0;
+    color: #ffffff;
+    font-size: 16;
+    width: 120;
+}
+
+.login-text,
+.register-text {
+    letter-spacing: 1px;
+    color: #747ce0;
+    font-size: 14px;
+    font-family: Raleway;
+    height: 24px;
 }
 
 /* Catalog page styles */
