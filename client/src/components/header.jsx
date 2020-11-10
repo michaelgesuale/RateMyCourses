@@ -52,8 +52,12 @@ export class Header extends React.Component {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleLogin}>Login</Button>
-                            <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleRegister}>Register</Button>
+                            <Link to="/login">
+                                <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleLogin}>Login</Button>
+                            </Link>
+                            <Link to="/register">
+                                <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleRegister}>Register</Button>
+                            </Link>
                         </React.Fragment>
                     )}
                 </div>

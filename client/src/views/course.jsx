@@ -10,6 +10,9 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import PersonIcon from '@material-ui/icons/Person';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 export class CoursePage extends React.Component {
 
@@ -21,6 +24,7 @@ export class CoursePage extends React.Component {
             prerequisites: null,
             loved: false,
             helpful: false,
+            showLoginToReview: false,
             showReviewPopup: false,
             reviewEnjoyment: 0,
             reviewUsefulness: 0,
@@ -40,6 +44,12 @@ export class CoursePage extends React.Component {
 
 	componentDidMount() {
 		this.updateCourseInfo();
+    }
+
+    toggleLoginToReview() {
+        const showLoginToReview = !this.state.showLoginToReview;
+        this.setState({ showLoginToReview });
+        console.log(showLoginToReview)
     }
 
     toggleReviewPopup() {
@@ -159,9 +169,19 @@ export class CoursePage extends React.Component {
                             <div className="course-reviews-title-container">
                                 <span className="course-reviews-title">Reviews</span>
                                 <div className="course-reviews-sort-container">
-                                    {
-                                        this.props.customProps.user && (
+                                    { this.props.customProps.user ? (
                                             <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleReviewPopup()}>Leave a review</Button>
+                                        ) : (
+                                            <React.Fragment>
+                                                <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleLoginToReview()}>Leave a review</Button>
+                                                <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showLoginToReview} message="Please login to leave a review." action={
+                                                    <React.Fragment>
+                                                        <IconButton size="small" color="inherit" onClick={() => this.toggleLoginToReview()}>
+                                                            <CloseIcon />
+                                                        </IconButton>
+                                                    </React.Fragment>
+                                                } />
+                                            </React.Fragment>
                                         )
                                     }
                                     <SortButton sortValues={ sortValues }></SortButton>
