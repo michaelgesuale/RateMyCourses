@@ -13,6 +13,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Alert from '@material-ui/lab/Alert';
 
 export class CoursePage extends React.Component {
 
@@ -25,6 +26,7 @@ export class CoursePage extends React.Component {
             loved: false,
             helpful: false,
             showLoginToReview: false,
+	   		showDomainError: false,
             showReviewPopup: false,
             reviewEnjoyment: 0,
             reviewUsefulness: 0,
@@ -50,6 +52,11 @@ export class CoursePage extends React.Component {
         const showLoginToReview = !this.state.showLoginToReview;
         this.setState({ showLoginToReview });
         console.log(showLoginToReview)
+    }
+
+    toggleShowDomainError() {
+        const showDomainError = !this.state.showDomainError;
+        this.setState({ showDomainError });
     }
 
     toggleReviewPopup() {
@@ -84,9 +91,14 @@ export class CoursePage extends React.Component {
 					usefulness: this.state.reviewUsefulness
 				}
 			),
-		}).then(() => {
-            this.setState({ showReviewPopup: false });
-            this.updateCourseInfo();
+		}).then(data => {
+			this.setState({ showReviewPopup: false });
+
+			if (data.status == 400) {
+				this.toggleShowDomainError();
+			} else {
+          			this.updateCourseInfo();
+			}
         }).catch(error => {
             console.log(error);
             this.setState({ showReviewPopup: false });
@@ -168,6 +180,8 @@ export class CoursePage extends React.Component {
                         <div className="course-reviews-container">
                             <div className="course-reviews-title-container">
                                 <span className="course-reviews-title">Reviews</span>
+			{this.state.showDomainError && <span><Alert onClose={() => {this.toggleShowDomainError()}} severity="error">Error: User email domain needs to match campus domain</Alert> </span>}
+
                                 <div className="course-reviews-sort-container">
                                     { this.props.customProps.user ? (
                                             <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleReviewPopup()}>Leave a review</Button>

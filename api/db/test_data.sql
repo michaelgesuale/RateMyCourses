@@ -7,8 +7,8 @@ INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT202', 
 INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT232', 1, 'MAT232 description',1, 'MATH');
 INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC207', 1, 'CSC207 description',1, 'CS');
 
-INSERT INTO users(email, username, password) VALUES ('test@test.com', 'test', '123456');
-INSERT INTO users(email, username, password) VALUES ('newUser', 'newUser', 'newUser');
+INSERT INTO users(email, username, password) VALUES ('test@mail.utoronto.ca', 'test', '123456');
+INSERT INTO users(email, username, password) VALUES ('newUser@mail.utoronto.ca', 'newUser', 'newUser');
 
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test', 'CSC490 REVIEW', 4, 4, 4, 4, 4);
 

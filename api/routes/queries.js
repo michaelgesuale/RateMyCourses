@@ -14,6 +14,9 @@ const getPrereq = `SELECT courses.course_id, courses.name FROM prereq, courses W
 
 const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as campus, courses.description, courses.overall_rating
 				FROM courses, campus WHERE courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
+
+const getCampusDomain = `SELECT domain FROM campus, courses WHERE courses.campus = campus.camp_id AND courses.course_id = $1`
+const getUserEmail = `SELECT email from users WHERE username=$1`
 	
 const insertReview = `INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, username;`
 const searchCoursesByName = `SELECT courses.name, courses.course_id, campus.name as campus, courses.description, courses.overall_rating
@@ -128,15 +131,25 @@ exports.postReview = [
 			return;
 		}
 		
-		db.task(async t => {	
+	db.task(async t => {	
 		overall = (parseInt(req.body.workload) + parseInt(req.body.enjoyment) + parseInt(req.body.difficulty) + parseInt(req.body.usefulness)) / 4
-
+		campus_domain = await t.one(getCampusDomain, [req.body.course_id]);
+		user_email = await t.one(getUserEmail, [req.body.username]);
+		
+		
+		email_domain = user_email.email.substring(user_email.email.lastIndexOf("@") +1);
+		
+		if (campus_domain.domain != email_domain) {
+			return;
+		}
+		
 		return await t.one(insertReview, [req.body.course_id , req.body.username, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
 	}).then (result => {
-	   console.log(result)
-	
-     	   if ('course_id' in result && 'username' in result) {
-          	res.status(200).end();
+		console.log(result)
+	   if (result == null) {
+		   res.status(400).end();
+		} else if ('course_id' in result && 'username' in result) {
+        	res.status(200).end();
        	 } else {
 		// return 400 if unsuccessful
         	res.status(400).send('Unable to create the review');
