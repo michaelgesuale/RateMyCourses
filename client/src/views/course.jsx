@@ -180,8 +180,11 @@ export class CoursePage extends React.Component {
                         <div className="course-reviews-container">
                             <div className="course-reviews-title-container">
                                 <span className="course-reviews-title">Reviews</span>
-			{this.state.showDomainError && <span><Alert onClose={() => {this.toggleShowDomainError()}} severity="error">Error: User email domain needs to match campus domain</Alert> </span>}
-
+			                        { this.state.showDomainError && 
+                                        <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showDomainError}>
+                                            <Alert onClose={() => {this.toggleShowDomainError()}} severity="error">You can only only leave a review if your e-mail domain matches this campus domain.</Alert>
+                                        </Snackbar>
+                                    }
                                 <div className="course-reviews-sort-container">
                                     { this.props.customProps.user ? (
                                             <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleReviewPopup()}>Leave a review</Button>
