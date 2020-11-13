@@ -26,6 +26,7 @@ export class CoursePage extends React.Component {
             helpful: false,
             showLoginToReview: false,
             showReviewPopup: false,
+            sortBy: 'Most recent',
             reviewEnjoyment: 0,
             reviewUsefulness: 0,
             reviewDifficulty: 0,
@@ -43,7 +44,14 @@ export class CoursePage extends React.Component {
     }
 
 	componentDidMount() {
-		this.updateCourseInfo();
+        this.updateCourseInfo();
+    }
+
+    sortReviews(event) {
+        const sortBy = event.target.id
+        if (sortBy) {
+            this.setState({sortBy})
+        }
     }
 
     toggleLoginToReview() {
@@ -93,6 +101,26 @@ export class CoursePage extends React.Component {
         });
     }
 
+    compareHelpful(a, b) {
+        if (a.helpful < b.helpful){
+            return 1;
+        }
+        if (a.helpful > b.helpful){
+            return -1;
+        }
+        return 0;
+    }
+
+    compareOverall(a, b) {
+        if (a.overall < b.overall){
+            return 1;
+        }
+        if (a.overall > b.overall){
+            return -1;
+        }
+        return 0;
+    }
+
 	render() {
         const {
             course,
@@ -117,6 +145,16 @@ export class CoursePage extends React.Component {
                     }
             />
         }
+
+        let sortedReviews
+        if (this.state.sortBy === 'Most recent') {
+            sortedReviews = reviews
+        } else if (this.state.sortBy === 'Helpfulness') {
+            sortedReviews = [...reviews].sort(this.compareHelpful);
+        } else if (this.state.sortBy === 'Overall rating') {
+            sortedReviews = [...reviews].sort(this.compareOverall); 
+        }
+        
 		return <DefaultLayout 
 				{ ...this.props }
 				content={
@@ -168,7 +206,7 @@ export class CoursePage extends React.Component {
                         <div className="course-reviews-container">
                             <div className="course-reviews-title-container">
                                 <span className="course-reviews-title">Reviews</span>
-                                <div className="course-reviews-sort-container">
+                                <div className="course-reviews-sort-container" onClick={e => this.sortReviews(e)}>
                                     { this.props.customProps.user ? (
                                             <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleReviewPopup()}>Leave a review</Button>
                                         ) : (
@@ -188,8 +226,8 @@ export class CoursePage extends React.Component {
                                 </div>
                             </div>
                             {
-                                reviews.length ? (
-                                    reviews.map((review, index) => {
+                                sortedReviews.length ? (
+                                    sortedReviews.map((review, index) => {
                                         return <div className="course-review-container" key={`course-review-${ index + 1 }`}>
                                             <div className="course-review-user-container">
                                                 <div className="course-review-user">

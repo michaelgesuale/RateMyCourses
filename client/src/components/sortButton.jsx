@@ -46,7 +46,7 @@ export class SortButton extends React.Component {
                     onClose={handleClose}
                 >
                     { sortValues.map(sortValue => {
-                        return <MenuItem onClick={handleClose} key={ sortValue }>{ sortValue }</MenuItem>
+                        return <MenuItem onClick={handleClose} id={sortValue} key={ sortValue }>{ sortValue }</MenuItem>
                     })}
                 </Menu>
             </React.Fragment>
