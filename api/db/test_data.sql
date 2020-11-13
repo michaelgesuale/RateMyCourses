@@ -9,6 +9,7 @@ INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC207', 
 
 INSERT INTO users(email, username, password) VALUES ('test@mail.utoronto.ca', 'test', '123456');
 INSERT INTO users(email, username, password) VALUES ('newUser@mail.utoronto.ca', 'newUser', 'newUser');
+INSERT INTO users(email, username, password) VALUES ('newUser@mail.utoronto.com', 'newUserC', 'newUser');
 
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test', 'CSC490 REVIEW', 4, 4, 4, 4, 4);
 
