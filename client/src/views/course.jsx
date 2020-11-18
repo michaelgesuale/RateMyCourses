@@ -13,6 +13,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Alert from '@material-ui/lab/Alert';
 
 export class CoursePage extends React.Component {
 
@@ -25,6 +26,7 @@ export class CoursePage extends React.Component {
             loved: false,
             helpful: false,
             showLoginToReview: false,
+	   		showDomainError: false,
             showReviewPopup: false,
             sortBy: 'Most recent',
             reviewEnjoyment: 0,
@@ -60,6 +62,11 @@ export class CoursePage extends React.Component {
         console.log(showLoginToReview)
     }
 
+    toggleShowDomainError() {
+        const showDomainError = !this.state.showDomainError;
+        this.setState({ showDomainError });
+    }
+
     toggleReviewPopup() {
         const showReviewPopup = !this.state.showReviewPopup;
         this.setState({ showReviewPopup });
@@ -92,9 +99,14 @@ export class CoursePage extends React.Component {
 					usefulness: this.state.reviewUsefulness
 				}
 			),
-		}).then(() => {
-            this.setState({ showReviewPopup: false });
-            this.updateCourseInfo();
+		}).then(data => {
+			this.setState({ showReviewPopup: false });
+
+			if (data.status == 400) {
+				this.toggleShowDomainError();
+			} else {
+          			this.updateCourseInfo();
+			}
         }).catch(error => {
             console.log(error);
             this.setState({ showReviewPopup: false });
@@ -206,6 +218,11 @@ export class CoursePage extends React.Component {
                         <div className="course-reviews-container">
                             <div className="course-reviews-title-container">
                                 <span className="course-reviews-title">Reviews</span>
+			                        { this.state.showDomainError && 
+                                        <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showDomainError}>
+                                            <Alert onClose={() => {this.toggleShowDomainError()}} severity="error">You can only only leave a review if your e-mail domain matches this campus domain.</Alert>
+                                        </Snackbar>
+                                    }
                                 <div className="course-reviews-sort-container" onClick={e => this.sortReviews(e)}>
                                     { this.props.customProps.user ? (
                                             <Button className="course-reviews-button button" variant="contained" color="primary" onClick={() => this.toggleReviewPopup()}>Leave a review</Button>
