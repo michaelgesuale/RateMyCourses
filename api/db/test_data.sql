@@ -19,5 +19,8 @@ INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, diff
 
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (4, 'test', 'CSC207 REVIEW', 5, 5, 5, 5, 5);
 
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (5, 'test', 'CSC490 REVIEW 2', 5, 5, 5, 5, 5);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (6, 'test', 'CSC490 REVIEW 3', 3, 3, 3, 3, 3);
+
 INSERT INTO prereq(course_id, require) VALUES (1, 2);
 INSERT INTO prereq(course_id, require) VALUES (1, 4);

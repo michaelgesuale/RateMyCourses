@@ -734,3 +734,48 @@ body {
     font-size: 18px;
     margin-right: 48px;
 }
+
+/* Likes page styles */
+
+.likes-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 32px;
+    margin-top: 64px;
+}
+
+.likes-header {
+    font-size: 36px;
+    font-family: Raleway;
+    font-weight: 100;
+    letter-spacing: 2px;
+    color: #747ce0;
+}
+
+.likes-course-name-container {
+    display: flex;
+    margin-top: 30px;
+}
+
+.liked-course-item-name {
+    color: #747ce0;
+    font-size: 30px;
+    font-family: Raleway;
+}
+
+.liked-course-icon-container {
+    margin-left: 20px;
+    margin-top: 2px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.liked-course-item-campus {
+    margin: 10px 0;
+    letter-spacing: 1px;
+    color: #737070;
+    font-size: 20px;
+    font-family: Raleway
+}
