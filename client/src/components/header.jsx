@@ -47,7 +47,9 @@ export class Header extends React.Component {
                                 <span className="header-icon-text">Likes</span>
                             </div>
                             <div className="header-icon-container">
-                                <RecommendationIcon/>
+                                <Link to="/recommendations">
+                                    <RecommendationIcon/>
+                                </Link>
                                 <span className="header-icon-text">Recommendations</span>
                             </div>
                             <Button className="header-button button" variant="contained" color="secondary" onClick={this.props.customProps.handleLogout}>Logout</Button>
