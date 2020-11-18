@@ -4,6 +4,8 @@ import { CatalogPage } from './catalog';
 import { CoursePage } from './course';
 import { LoginPage } from './login';
 import { RegisterPage } from './register';
+import { LikesPage } from './likes';
+import { RecommendationsPage } from './recommendations';
 
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
@@ -46,6 +48,8 @@ export class Base extends React.Component {
                     <Route path="/register" render={(props) => (<RegisterPage {...props} customProps={customProps} />)}></Route>
                     <Route path="/course/:id" render={(props) => (<CoursePage {...props} customProps={customProps} key={props.location.state.course_id}/>)}></Route>
                     <Route path="/catalog" render={(props) => (<CatalogPage {...props} customProps={customProps} />)}></Route>
+                    <Route path="/likes" render={(props) => (<LikesPage {...props} customProps={customProps} />)}></Route>
+                    <Route path="/recommendations" render={(props) => (<RecommendationsPage {...props} customProps={customProps} />)}></Route>
                     <Route path="/" render={(props) => (<HomePage {...props} customProps={customProps} />)}></Route>
                 </Switch>
             </BrowserRouter>
