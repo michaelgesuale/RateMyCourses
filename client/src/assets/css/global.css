@@ -735,8 +735,9 @@ body {
     margin-right: 48px;
 }
 
-/* Likes page styles */
+/* Likes/Recommendations page styles */
 
+.recommendations-container,
 .likes-container {
     display: flex;
     flex-direction: column;
@@ -746,6 +747,7 @@ body {
     margin-top: 64px;
 }
 
+.recommendations-header,
 .likes-header {
     font-size: 36px;
     font-family: Raleway;
@@ -754,17 +756,20 @@ body {
     color: #747ce0;
 }
 
+.recommendations-course-name-container,
 .likes-course-name-container {
     display: flex;
     margin-top: 30px;
 }
 
+.recommendations-course-item-name,
 .liked-course-item-name {
     color: #747ce0;
     font-size: 30px;
     font-family: Raleway;
 }
 
+.recommendations-course-icon-container,
 .liked-course-icon-container {
     margin-left: 20px;
     margin-top: 2px;
@@ -772,6 +777,7 @@ body {
     cursor: pointer;
 }
 
+.recommendations-course-item-campus,
 .liked-course-item-campus {
     margin: 10px 0;
     letter-spacing: 1px;
