@@ -22,6 +22,10 @@ const insertReview = `INSERT INTO reviews(course_id, username, user_comment, wor
 const searchCoursesByName = `SELECT courses.name, courses.course_id, campus.name as campus, courses.description, courses.overall_rating
 	FROM courses, campus WHERE courses.campus = campus.camp_id AND courses.name = $1 ORDER BY overall_rating DESC;`
 
+const getExistingUser = `SELECT email, username FROM users WHERE email=$1 AND password=$2;`
+
+const insertUser = 'INSERT INTO users(email, username, password) VALUES ($1, $2, $3);'
+
 // Run Queries here 
 exports.test = [
 	async function(req, res, next) {
@@ -191,4 +195,51 @@ exports.searchCoursesByName = [
 		res.status(200).json(result);
 	}).catch(e => {res.status(500); res.send(e)})
   }
+];
+
+exports.login = [
+	body('email')
+	.exists()
+	.withMessage('Missing University E-mail')
+	.bail()
+	.trim(),
+	body('password')
+	.exists()
+	.withMessage('Missing password')
+	.bail(),
+	async function(req, res, next) {
+		db.task(async t => {
+		return await t.one(getExistingUser, [req.body.email, req.body.password]);
+	}).then (result => {
+		res.status(200).json(result);
+	}).catch(() => {res.status(400); res.send("E-mail or password is invalid")})
+	}
+];
+
+exports.register = [
+	body('username')
+	.exists()
+	.withMessage('Missing Username')
+	.bail()
+	.trim(),
+	body('email')
+	.exists()
+	.withMessage('Missing University E-mail')
+	.bail()
+	.trim(),
+	body('password')
+	.exists()
+	.withMessage('Missing password')
+	.bail(),
+	async function(req, res, next) {
+		db.task(async t => {
+		const email = req.body.email;
+		const username = req.body.username;
+		const password = req.body.password;
+		await t.none(insertUser, [email, username, password]);
+		return t.one(getExistingUser, [email, password]);
+	}).then (result => {
+		res.status(200).json(result);
+	}).catch(() => {res.status(400); res.send("E-mail already registered or username already taken")})
+	}
 ];

@@ -3,7 +3,7 @@ import { DefaultLayout } from '../layouts/default';
 import { LabelRating } from './../components/labelRating';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 export class RecommendationsPage extends React.Component {
 
@@ -29,6 +29,9 @@ export class RecommendationsPage extends React.Component {
     }
     
 	render() {
+        if (!this.props.customProps.user) {
+            return <Redirect to="/"/>;
+        }
         const recommendedCourses = [
             {
                 name: 'CSC490',
