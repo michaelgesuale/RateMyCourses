@@ -206,6 +206,92 @@ exports.getCourses = [
   }
 ];
 
+exports.likeCourse = [
+	body('username')
+	.exists()
+	.withMessage('Missing Username Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	body('course_id')
+	.exists()
+	.withMessage('Missing Course Id Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	async function(req, res, next) {
+		db.task(async t => {
+			const user_email = await t.one(getUserEmail, [req.body.username]);
+			return await t.any(likeCourse, [user_email.email, req.body.course_id]);
+		}).then (result => {
+			res.status(200).json(result);
+		}).catch(e => {res.status(500); res.send(e)})
+	}
+];
+
+exports.unlikeCourse = [
+	body('username')
+	.exists()
+	.withMessage('Missing Username Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	body('course_id')
+	.exists()
+	.withMessage('Missing Course Id Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	async function(req, res, next) {
+		db.task(async t => {
+			const user_email = await t.one(getUserEmail, [req.body.username]);
+			return await t.any(unlikeCourse, [user_email.email, req.body.course_id]);
+		}).then (result => {
+			res.status(200).json(result);
+		}).catch(e => {res.status(500); res.send(e)})
+	}
+];
+
+exports.getLikedCoursesByUser = [
+	body('username')
+	.exists()
+	.withMessage('Missing Username Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	async function(req, res, next) {
+		db.task(async t => {
+			const user_email = await t.one(getUserEmail, [req.body.username]);
+			return await t.any(getLikedCoursesByUser, [user_email.email]);
+		}).then (result => {
+			res.status(200).json(result);
+		}).catch(e => {res.status(500); res.send(e)})
+	}
+]
+
+exports.hasUserLikedCourse = [
+	body('username')
+	.exists()
+	.withMessage('Missing Username Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	body('course_id')
+	.exists()
+	.withMessage('Missing Course Id Parameter')
+	.bail()
+	.trim()
+	.escape(),
+	async function(req, res, next) {
+		db.task(async t => {
+			const user_email = await t.one(getUserEmail, [req.body.username]);
+			return await t.any(hasUserLikedCourse, [user_email.email, req.body.course_id]);
+		}).then (result => {
+			res.status(200).json(result);
+		}).catch(e => {res.status(500); res.send(e)})
+	}
+]
+
 exports.searchCoursesByName = [
 	param('course_name')
 	.exists()
