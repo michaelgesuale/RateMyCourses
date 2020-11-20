@@ -26,7 +26,7 @@ export class Courses extends React.Component {
                     <span className="courses-total-count">{ `${ total } result${ total !== 1 ? 's' : ''}` }</span>
                     <div className="courses-sort-container">
                         <div>
-                            <SortButton sortValues={sortValues}></SortButton>
+                            <SortButton sortValues={sortValues} sortFunc={this.props.sortFunc}></SortButton>
                         </div>
                     </div>
                 </div>
