@@ -42,7 +42,7 @@ export class RegisterPage extends React.Component {
 
 	render() {
 		if (this.props.customProps.user) {
-			return <Redirect to="/recommendations"/>;
+			return <Redirect to="/"/>;
 		}
 		return <DefaultLayout 
 				{ ...this.props }
@@ -53,7 +53,7 @@ export class RegisterPage extends React.Component {
                         <form className="register-form" noValidate autoComplete="off">
                             <TextField required id="username-field" label="Username" onChange={(event) => this.setState({username: event.target.value})}/>
                             <TextField required id="email-field" label="University e-mail" onChange={(event) => this.setState({email: event.target.value})}/>
-                            <TextField required id="password-field" label="Password" onChange={(event) => this.setState({password: event.target.value})}/>
+                            <TextField required id="password-field" type="password" label="Password" onChange={(event) => this.setState({password: event.target.value})}/>
                         </form>
 						<Button className="register-button button" variant="contained" color="primary" onClick={() => this.handleRegister()}>Register</Button>
 

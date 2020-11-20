@@ -40,7 +40,7 @@ export class LoginPage extends React.Component {
 
 	render() {
 		if (this.props.customProps.user) {
-			return <Redirect to="/recommendations"/>;
+			return <Redirect to="/"/>;
 		}
 		return <DefaultLayout 
 				{ ...this.props }
@@ -50,7 +50,7 @@ export class LoginPage extends React.Component {
 						<h2 className="login-header">Log into your account</h2>
                         <form className="login-form" noValidate autoComplete="off">
                             <TextField required id="email-field" label="University e-mail" onChange={(event) => this.setState({ email: event.target.value })}/>
-                            <TextField required id="password-field" label="Password" onChange={(event) => this.setState({ password: event.target.value })}/>
+                            <TextField required id="password-field" type="password" label="Password" onChange={(event) => this.setState({ password: event.target.value })}/>
                         </form>
 						<Button className="login-button button" variant="contained" color="primary" onClick={() => this.authenticate()}>Login</Button>
 
