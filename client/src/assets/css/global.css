@@ -637,11 +637,12 @@ body {
 }
 
 .course-review-popup-container {
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
+    top: 0;
     width: 100%;
-    min-height: calc(100vh - 64px);
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
 }
 
