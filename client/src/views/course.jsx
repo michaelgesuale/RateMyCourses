@@ -57,13 +57,15 @@ export class CoursePage extends React.Component {
                         username: this.props.customProps.user.name,
                         course_id: this.props.location.state.course_id,
                     }
-                )
-                }).then(data => {
-                    this.setState({ loved: data.case });
+                )})
+                .then(response => response.json())
+                .then(data => {
+                    const loved = data[0].case === "1"
+                    this.setState({ loved });
                 }).catch(error => {
                     console.log(error);
                     this.setState({ showReviewPopup: false });
-            	});
+                });
         }
     }
 

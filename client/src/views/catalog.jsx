@@ -40,13 +40,11 @@ export class CatalogPage extends React.Component {
 		if (prevProps.location.state === locationState) {
 			return
 		}
-
 		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
 			: 'http://localhost:3000/api/courses'
 		fetch(apiToFetch)
 			.then(response => response.json())
-			.then(data => {
-				this.setState({ data: data})
+			.then(data => {this.setState({ courses: data })
 			}).catch(error => {console.error(error)});
 	}
 
