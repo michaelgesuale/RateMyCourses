@@ -21,11 +21,14 @@ export class Filters extends React.Component {
 
         const handleChange = (name) => {
             let selectedFilters = this.state.selectedFilters.split(',');
+
             if (selectedFilters.includes(name)) selectedFilters = selectedFilters.filter(val => val !== name);
             else selectedFilters.push(name);
             this.setState({ selectedFilters: selectedFilters.join(',') });
+
+	    this.props.filterCourses(selectedFilters.slice(1));
         }
-        
+
         return (
             <div className="filter-container">
                 {
@@ -34,7 +37,7 @@ export class Filters extends React.Component {
                             <span className="filter-group">{ key }</span>
                             {
                                 filters[key].map(filter => {
-                                    const name = (key + '-' + filter).replace(/ /g, '-').toLowerCase();
+                                    const name = (key + ':' + filter).replace(/ /g, '-').toLowerCase();
                                     return <FormControlLabel
                                         control={
                                             <Checkbox 

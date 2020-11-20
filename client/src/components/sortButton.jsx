@@ -27,8 +27,9 @@ export class SortButton extends React.Component {
             this.setState({ sortAnchor: event.currentTarget });
         };
 
-        const handleClose = () => {
+        const handleClose = (event) => {
             this.setState({ sortAnchor: null });
+	    this.props.sortFunc(event.target.id);
         };
 
         return (
