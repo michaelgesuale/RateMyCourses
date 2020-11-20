@@ -46,23 +46,25 @@ export class CoursePage extends React.Component {
     }
 
     displayLiked() {
-        fetch('http://localhost:3000/api/hasUserLikedCourse', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams(
-                {
-                    username: this.props.customProps.user.name,
-                    course_id: this.props.location.state.course_id,
-                }
-            )
-            }).then(data => {
-                this.setState({ loved: data.case });
-            }).catch(error => {
-                console.log(error);
-                this.setState({ showReviewPopup: false });
+        if (this.props.customProps.user) {
+            fetch('http://localhost:3000/api/hasUserLikedCourse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams(
+                    {
+                        username: this.props.customProps.user.name,
+                        course_id: this.props.location.state.course_id,
+                    }
+                )
+                }).then(data => {
+                    this.setState({ loved: data.case });
+                }).catch(error => {
+                    console.log(error);
+                    this.setState({ showReviewPopup: false });
             });
+        }
     }
 
 	componentDidMount() {

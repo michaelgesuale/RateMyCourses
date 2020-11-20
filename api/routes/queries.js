@@ -26,11 +26,11 @@ const getExistingUser = `SELECT email, username FROM users WHERE email=$1 AND pa
 const insertUser = 'INSERT INTO users(email, username, password) VALUES ($1, $2, $3);'
 
 const getRecommendedCourses = `SELECT courses.course_id, courses.name, courses.description, courses.overall_rating, courses.year, courses.subject, campus.name as campus
-	FROM courses
-	INNER JOIN campus ON courses.campus = campus.camp_id
-	INNER JOIN likes ON likes.user_email = $1
-	INNER JOIN prereq ON courses.course_id = prereq.require
-	WHERE courses.overall_rating >= 3;`
+	FROM prereq, courses, campus
+	WHERE courses.campus = campus.camp_id
+	AND prereq.course_id = courses.course_id
+	AND prereq.require IN (SELECT courses.course_id FROM courses, likes WHERE likes.course_id = courses.course_id AND likes.user_email = $1)
+	AND courses.overall_rating >= 3;`
 
 const likeCourse = 'INSERT INTO likes(user_email, course_id) VALUES ($1, $2)'
 const unlikeCourse = 'DELETE FROM likes WHERE user_email=$1 AND course_id=$2'

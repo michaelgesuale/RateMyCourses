@@ -1,7 +1,9 @@
 import React from 'react';
 import { DefaultLayout } from '../layouts/default';
-import { Courses } from './../components/courses';
-import { Redirect } from 'react-router-dom';
+import { LabelRating } from './../components/labelRating';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { Link, Redirect } from 'react-router-dom';
 
 export class RecommendationsPage extends React.Component {
 
@@ -41,7 +43,22 @@ export class RecommendationsPage extends React.Component {
                     <h2 className="recommendations-header">Recommended Courses Based On Your Likes</h2>
                         {
                             recommendedCourses.length ? (
-                                <Courses courses={ recommendedCourses }/>
+                                recommendedCourses.map((course) => {
+                                    return <React.Fragment>
+                                    <div className="recommendations-course-name-container" key={ course.name }>
+                                        <Link className="recommendations-course-item-name"
+                                            to={{
+                                                pathname: `/course/${ course.name }`,
+                                                state: {
+                                                        course_id: course.course_id
+                                                }
+                                            }}>{ course.name }</Link>
+                                        <div className="courses-item-rating"><LabelRating rating={ course.overall_rating }></LabelRating></div>
+                                    </div>
+                                    <span className="recommendations-course-item-campus">{ course.campus }</span>
+                                    <span className="courses-item-description">{ course.description }</span>
+                                </React.Fragment>
+                                })
                             ) : (
                                 <div className="recommendations-course-item-campus"><br></br>No recommended courses yet!</div>
                             )
