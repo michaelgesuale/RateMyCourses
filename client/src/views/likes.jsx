@@ -1,7 +1,6 @@
 import React from 'react';
 import { DefaultLayout } from '../layouts/default';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { Link, Redirect } from 'react-router-dom';
 
 export class LikesPage extends React.Component {
@@ -10,31 +9,49 @@ export class LikesPage extends React.Component {
 		super(props);
 		this.state = {
             data: null,
-            loved: true, 
 		}
 	}
 
-	componentDidMount() { 
-        fetch('http://localhost:3000/api/getLikes', {
-            method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			body: new URLSearchParams(
-				{
-					username: this.props.customProps.user.name,
-				}
-			),
-        })
-			.then(response => response.json())
-			.then(data => {
-				this.setState({ data: data})
-            }).catch(error => {console.error(error)});
+	componentDidMount() {
+        this.getLikes()
     }
 
-    handleLovedClick() {
-        const loved = !this.state.loved;
-        this.setState({ loved });
+    getLikes() {
+        if (this.props.customProps.user) {
+            fetch('http://localhost:3000/api/getLikes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams(
+                    {
+                        username: this.props.customProps.user.name,
+                    }
+                ),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    this.setState({ data: data})
+                }).catch(error => {console.error(error)});
+        }
+    }
+
+    async handleLovedClick(e) {
+        await fetch(`http://localhost:3000/api/unlike`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(
+                {
+                    username: this.props.customProps.user.name,
+                    course_id: e.target.parentNode.id,
+                }
+            ),
+        }).catch(error => {
+            console.log(error);
+        });
+        this.getLikes()
     }
     
 	render() {
@@ -50,7 +67,7 @@ export class LikesPage extends React.Component {
 					<div className="likes-container">
                         <h2 className="likes-header">Liked Courses</h2>
                         {
-                            likedCourses ? (
+                            likedCourses && likedCourses.length ? (
                                 likedCourses.map((course) => {
                                     return <React.Fragment>
                                     <div className="likes-course-name-container" key={ course.name }>
@@ -58,16 +75,14 @@ export class LikesPage extends React.Component {
                                             to={{
                                                 pathname: `/course/${ course.name }`,
                                                 state: {
-                                                        course_id: course.course_id
+                                                    course_id: course.course_id
                                                 }
                                             }}>{ course.name }</Link>
-                                        <div className="liked-course-icon-container" onClick={() => this.handleLovedClick()}>
-                                            { this.state.loved ? (
-                                                    <FavoriteIcon className="course-icon"/>
-                                                ) : (
-                                                    <FavoriteBorderIcon className="course-icon"/>
-                                                )
-                                            }
+                                        <div 
+                                            className="liked-course-icon-container" 
+                                            onClick={e => this.handleLovedClick(e)}
+                                        >
+                                            <FavoriteIcon id={course.course_id} className="course-icon"/>
                                         </div>
                                     </div>
                                     <span className="liked-course-item-campus">{ course.campus }</span>
