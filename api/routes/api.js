@@ -25,4 +25,7 @@ router.route('/login')
 router.route('/register')
     .post(db.register)
 
+router.route('/recommendations/:email')
+    .get(db.getUserRecommendations)
+
 module.exports = router;

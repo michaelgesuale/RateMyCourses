@@ -25,6 +25,13 @@ const getExistingUser = `SELECT email, username FROM users WHERE email=$1 AND pa
 
 const insertUser = 'INSERT INTO users(email, username, password) VALUES ($1, $2, $3);'
 
+const getRecommendedCourses = `SELECT courses.course_id, courses.name, courses.description, courses.overall_rating, courses.year, courses.subject, campus.name as campus
+	FROM courses
+	INNER JOIN campus ON courses.campus = campus.camp_id
+	INNER JOIN likes ON likes.user_email = $1
+	INNER JOIN prereq ON courses.course_id = prereq.require
+	WHERE courses.overall_rating >= 3;`
+
 // Run Queries here 
 exports.test = [
 	async function(req, res, next) {
@@ -241,4 +248,18 @@ exports.register = [
 		res.status(200).json(result);
 	}).catch(() => {res.status(400); res.send("E-mail already registered or username already taken")})
 	}
+];
+
+exports.getUserRecommendations = [
+	param('email')
+	.exists()
+	.withMessage('Missing user email')
+	.bail(),
+	async function(req, res, next) {
+		db.task(async t => {
+		return await t.any(getRecommendedCourses, [req.params.email]);
+	}).then (result => {
+		res.status(200).json(result);
+	}).catch(e => {res.status(500); res.send(e)})
+  }
 ];
