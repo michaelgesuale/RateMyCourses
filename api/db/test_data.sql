@@ -2,13 +2,13 @@ INSERT INTO university(name) VALUES ('University of Toronto');
 
 INSERT INTO campus(name, domain, university) VALUES ('University of Toronto Mississauga', 'mail.utoronto.ca', 1);
 
-INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC490', 1, 'CSC490 description',1, 'Computer Science');
-INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT202', 1, 'MAT202 description',1, 'Math');
-INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT232', 1, 'MAT232 description',1, 'Math');
-INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC207', 1, 'CSC207 description',1, 'Computer Science');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC490', 1, 'CSC490 description', 4, 'Computer Science');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT202', 1, 'MAT202 description', 2, 'Math');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT232', 1, 'MAT232 description', 2, 'Math');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC207', 1, 'CSC207 description', 2, 'Computer Science');
 
-INSERT INTO courses(name, campus, description, year, subject) VALUES ('AAA000', 1, 'AAA000 description',1, 'Computer Science');
-INSERT INTO courses(name, campus, description, year, subject) VALUES ('ZZZ999', 1, 'ZZZ000 description',1, 'Computer Science');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('AAA100', 1, 'AAA000 description', 1, 'Computer Science');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('ZZZ499', 1, 'ZZZ000 description', 4, 'Computer Science');
 
 INSERT INTO users(email, username, password) VALUES ('test@mail.utoronto.ca', 'test', '123456');
 INSERT INTO users(email, username, password) VALUES ('test1@mail.utoronto.ca', 'test1', '123456');
