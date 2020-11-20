@@ -25,4 +25,16 @@ router.route('/login')
 router.route('/register')
     .post(db.register)
 
+router.route('/like')
+    .post(db.likeCourse)
+
+router.route('/unlike')
+    .post(db.unlikeCourse)
+
+router.route('/getLikes')
+    .post(db.getLikedCoursesByUser)
+
+router.route('/hasUserLikedCourse')
+    .post(db.hasUserLikedCourse)
+
 module.exports = router;
