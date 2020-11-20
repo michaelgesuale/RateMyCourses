@@ -320,7 +320,7 @@ export class CoursePage extends React.Component {
                                         </div>
                                     })
                                 ) : (
-                                    <div>No reviews</div>
+                                    <div className="course-review-user-name"><br></br>No reviews yet!</div>
                                 )
                             }
                         </div>
