@@ -13,21 +13,21 @@ INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC290', 
 
 
 
-INSERT INTO users(email, username, password) VALUES ('test@mail.utoronto.ca', 'test', '123456');
-INSERT INTO users(email, username, password) VALUES ('test1@mail.utoronto.ca', 'test1', '123456');
-INSERT INTO users(email, username, password) VALUES ('test2@mail.utoronto.ca', 'test2', '123456');
+INSERT INTO users(email, username, password) VALUES ('test@mail.utoronto.ca', 'Sam', '123456');
+INSERT INTO users(email, username, password) VALUES ('test1@mail.utoronto.ca', 'Clover', '123456');
+INSERT INTO users(email, username, password) VALUES ('test2@mail.utoronto.ca', 'Alex', '123456');
 
 INSERT INTO users(email, username, password) VALUES ('newUser@mail.utoronto.ca', 'newUser', 'newUser');
 INSERT INTO users(email, username, password) VALUES ('newUser@mail.utoronto.com', 'newUserC', 'newUser');
 
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test', 'CSC490 REVIEW', 4, 4, 4, 4, 4);
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (2, 'test', 'CHM110 REVIEW', 1, 1, 1, 1, 1);
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (3, 'test', 'SOC100 REVIEW', 3, 3, 3, 3, 3);
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (4, 'test', 'CSC207 REVIEW', 4, 4, 4, 4, 4);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'Sam', 'Amazing course with lots of oppourtunities to show your skills. Take this course!', 4, 5, 3, 4, 5);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (2, 'Sam', 'Lots of homework, lots of work and quizzes. this course completely destroyed my summer, my sanity and my GPA', 1, 1, 1, 1, 1);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (3, 'Sam', 'Fair course, the professor was really nice but the assignments were kind of hard if you dont go to lecture', 4, 3, 3, 2, 3);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (4, 'Sam', 'Great course, I learnt a lot and this is very applicable to real life', 4, 4, 3, 5, 4);
 
 
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test1', 'CSC490 REVIEW 2', 5, 5, 5, 5, 5);
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'test2', 'CSC490 REVIEW 3', 3, 3, 3, 3, 3);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'Clover', 'The most straightforward class ive ever taken. ', 5, 5, 5, 5, 5);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'Alex', 'Though material can be a bit dry at the beginning, I still enjoyed it and found it to be a helpful course', 3, 2, 3, 5, 3);
 
 INSERT INTO prereq(course_id, require) VALUES (4, 5);
 INSERT INTO prereq(course_id, require) VALUES (5, 6);
