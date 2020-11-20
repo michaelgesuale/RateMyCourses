@@ -72,14 +72,6 @@ export class RecommendationsPage extends React.Component {
                                                 }
                                             }}>{ course.name }</Link>
                                         <div className="courses-item-rating"><LabelRating rating={ course.overall_rating }></LabelRating></div>
-                                        <div className="recommendations-course-icon-container" onClick={() => this.handleLovedClick()}>
-                                            { this.state.loved ? (
-                                                    <FavoriteIcon className="course-icon"/>
-                                                ) : (
-                                                    <FavoriteBorderIcon className="course-icon"/>
-                                                )
-                                            }
-                                        </div>
                                     </div>
                                     <span className="recommendations-course-item-campus">{ course.campus }</span>
                                     <span className="courses-item-description">{ course.description }</span>

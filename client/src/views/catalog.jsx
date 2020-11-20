@@ -113,7 +113,6 @@ export class CatalogPage extends React.Component {
 			],
 			'University': [
 				'Learning U',
-				'UTM',
 				'WutUni',
 				'University of Toronto'
 			],
@@ -137,7 +136,6 @@ export class CatalogPage extends React.Component {
 
 		const universities = [
 			'Learning U',
-			'UTM',
 			'WutUni',
 			'University of Toronto'
 		]
