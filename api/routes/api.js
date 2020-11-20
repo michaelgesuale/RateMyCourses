@@ -28,4 +28,16 @@ router.route('/register')
 router.route('/recommendations/:email')
     .get(db.getUserRecommendations)
 
+router.route('/like')
+    .post(db.likeCourse)
+
+router.route('/unlike')
+    .post(db.unlikeCourse)
+
+router.route('/getLikes')
+    .post(db.getLikedCoursesByUser)
+
+router.route('/hasUserLikedCourse')
+    .post(db.hasUserLikedCourse)
+
 module.exports = router;

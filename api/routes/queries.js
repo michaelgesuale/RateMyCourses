@@ -32,6 +32,26 @@ const getRecommendedCourses = `SELECT courses.course_id, courses.name, courses.d
 	INNER JOIN prereq ON courses.course_id = prereq.require
 	WHERE courses.overall_rating >= 3;`
 
+const likeCourse = 'INSERT INTO likes(user_email, course_id) VALUES ($1, $2)'
+const unlikeCourse = 'DELETE FROM likes WHERE user_email=$1 AND course_id=$2'
+const getLikedCoursesByUser = `
+	SELECT 
+	courses.name, courses.course_id, campus.name as campus, courses.description, courses.overall_rating
+	FROM courses, campus, likes 
+	WHERE likes.user_email = $1
+	AND likes.course_id = courses.course_id
+	ORDER BY name DESC;
+`
+const hasUserLikedCourse = `
+SELECT CASE WHEN EXISTS (
+	SELECT * FROM likes
+	WHERE likes.user_email = $1
+	AND likes.course_id = $2
+)
+THEN CAST(1 AS BIT)
+ELSE CAST(0 AS BIT) END
+`
+
 // Run Queries here 
 exports.test = [
 	async function(req, res, next) {

@@ -1,10 +1,7 @@
 import React from 'react';
 import { DefaultLayout } from '../layouts/default';
 import { Courses } from './../components/courses';
-import { LabelRating } from './../components/labelRating';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 export class RecommendationsPage extends React.Component {
 

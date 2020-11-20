@@ -45,8 +45,29 @@ export class CoursePage extends React.Component {
             }).catch(error => console.log(error));
     }
 
+    displayLiked() {
+        fetch('http://localhost:3000/api/hasUserLikedCourse', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(
+                {
+                    username: this.props.customProps.user.name,
+                    course_id: this.props.location.state.course_id,
+                }
+            )
+            }).then(data => {
+                this.setState({ loved: data.case });
+            }).catch(error => {
+                console.log(error);
+                this.setState({ showReviewPopup: false });
+            });
+    }
+
 	componentDidMount() {
         this.updateCourseInfo();
+        this.displayLiked();
     }
 
     sortReviews(event) {
@@ -75,6 +96,22 @@ export class CoursePage extends React.Component {
     handleLovedClick() {
         const loved = !this.state.loved;
         this.setState({ loved });
+        const path = loved ? 'like' : 'unlike'
+        fetch(`http://localhost:3000/api/${path}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(
+                {
+                    username: this.props.customProps.user.name,
+                    course_id: this.props.location.state.course_id,
+                }
+            ),
+        }).catch(error => {
+            console.log(error);
+            this.setState({ loved: false });
+        });
     }
 
     handleHelpfulClick() {
