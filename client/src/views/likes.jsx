@@ -15,11 +15,21 @@ export class LikesPage extends React.Component {
 	}
 
 	componentDidMount() { 
-		fetch('http://localhost:3000/api/test')
+        fetch('http://localhost:3000/api/getLikes', {
+            method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: new URLSearchParams(
+				{
+					username: this.props.customProps.user.name,
+				}
+			),
+        })
 			.then(response => response.json())
 			.then(data => {
 				this.setState({ data: data})
-			}).catch(error => {console.error(error)});
+            }).catch(error => {console.error(error)});
     }
 
     handleLovedClick() {
@@ -32,21 +42,7 @@ export class LikesPage extends React.Component {
             return <Redirect to="/"/>;
         }
 
-        const likedCourses1 = []
-        const likedCourses = [
-            {
-                name: 'CSC490',
-                campus: 'University of Toronto Mississauga',
-            },
-            {
-                name: 'CSC207',
-                campus: 'University of Toronto Mississauga',
-            },
-            {
-                name: 'CSC108',
-                campus: 'University of Toronto Mississauga',
-            }
-        ]
+        const likedCourses = this.state.data
 
 		return <DefaultLayout
 				{ ...this.props }
@@ -54,7 +50,7 @@ export class LikesPage extends React.Component {
 					<div className="likes-container">
                         <h2 className="likes-header">Liked Courses</h2>
                         {
-                            likedCourses.length ? (
+                            likedCourses ? (
                                 likedCourses.map((course) => {
                                     return <React.Fragment>
                                     <div className="likes-course-name-container" key={ course.name }>
