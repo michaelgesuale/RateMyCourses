@@ -31,6 +31,8 @@ export class LikesPage extends React.Component {
         if (!this.props.customProps.user) {
             return <Redirect to="/"/>;
         }
+
+        const likedCourses1 = []
         const likedCourses = [
             {
                 name: 'CSC490',
@@ -51,9 +53,10 @@ export class LikesPage extends React.Component {
 				content={
 					<div className="likes-container">
                         <h2 className="likes-header">Liked Courses</h2>
-                        { likedCourses.map(course => {
-                            return (
-                                <React.Fragment>
+                        {
+                            likedCourses.length ? (
+                                likedCourses.map((course) => {
+                                    return <React.Fragment>
                                     <div className="likes-course-name-container" key={ course.name }>
                                         <Link className="liked-course-item-name"
                                             to={{
@@ -73,8 +76,11 @@ export class LikesPage extends React.Component {
                                     </div>
                                     <span className="liked-course-item-campus">{ course.campus }</span>
                                 </React.Fragment>
+                                })
+                            ) : (
+                                <div className="liked-course-item-campus"><br></br>You haven't liked any courses yet!</div>
                             )
-                        })}
+                        }
 					</div>
 				}
 		/>

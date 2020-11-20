@@ -32,6 +32,7 @@ export class RecommendationsPage extends React.Component {
         if (!this.props.customProps.user) {
             return <Redirect to="/"/>;
         }
+        const recommendedCourses1 = []
         const recommendedCourses = [
             {
                 name: 'CSC490',
@@ -58,32 +59,36 @@ export class RecommendationsPage extends React.Component {
             content={
                 <div className="recommendations-container">
                     <h2 className="recommendations-header">Recommended Courses Based On Your Likes</h2>
-                    { recommendedCourses.map(course => {
-                        return (
-                            <React.Fragment>
-                                <div className="recommendations-course-name-container" key={ course.name }>
-                                    <Link className="recommendations-course-item-name"
-                                        to={{
-                                            pathname: `/course/${ course.name }`,
-                                            state: {
-                                                    course_id: course.course_id
+                        {
+                            recommendedCourses.length ? (
+                                recommendedCourses.map((course) => {
+                                    return <React.Fragment>
+                                    <div className="recommendations-course-name-container" key={ course.name }>
+                                        <Link className="recommendations-course-item-name"
+                                            to={{
+                                                pathname: `/course/${ course.name }`,
+                                                state: {
+                                                        course_id: course.course_id
+                                                }
+                                            }}>{ course.name }</Link>
+                                        <div className="courses-item-rating"><LabelRating rating={ course.overall_rating }></LabelRating></div>
+                                        <div className="recommendations-course-icon-container" onClick={() => this.handleLovedClick()}>
+                                            { this.state.loved ? (
+                                                    <FavoriteIcon className="course-icon"/>
+                                                ) : (
+                                                    <FavoriteBorderIcon className="course-icon"/>
+                                                )
                                             }
-                                        }}>{ course.name }</Link>
-                                    <div className="courses-item-rating"><LabelRating rating={ course.overall_rating }></LabelRating></div>
-                                    <div className="recommendations-course-icon-container" onClick={() => this.handleLovedClick()}>
-                                        { this.state.loved ? (
-                                                <FavoriteIcon className="course-icon"/>
-                                            ) : (
-                                                <FavoriteBorderIcon className="course-icon"/>
-                                            )
-                                        }
+                                        </div>
                                     </div>
-                                </div>
-                                <span className="recommendations-course-item-campus">{ course.campus }</span>
-                                <span className="courses-item-description">{ course.description }</span>
-                            </React.Fragment>
-                        )
-                    })}
+                                    <span className="recommendations-course-item-campus">{ course.campus }</span>
+                                    <span className="courses-item-description">{ course.description }</span>
+                                </React.Fragment>
+                                })
+                            ) : (
+                                <div className="recommendations-course-item-campus"><br></br>No recommended courses yet!</div>
+                            )
+                        }
                 </div>
             }
         />  
