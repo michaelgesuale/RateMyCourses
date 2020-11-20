@@ -19,4 +19,10 @@ router.route('/reviews')
 router.route('/search/:course_name')
     .get(db.searchCoursesByName)
 
+router.route('/login')
+    .post(db.login)
+
+router.route('/register')
+    .post(db.register)
+
 module.exports = router;

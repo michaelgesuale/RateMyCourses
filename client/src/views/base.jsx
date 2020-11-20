@@ -18,28 +18,23 @@ export class Base extends React.Component {
         }
     }
 
-    handleLogin() {
+    handleLogin(email, username) {
         const user = {
-            id: 0,
-            name: 'newUser'
+            email: email,
+            name: username
         }
         this.setState({ user });
-    }
-
-    handleRegister() {
-        this.handleLogin();
     }
 
     handleLogout() {
         this.setState({ user: undefined });
     }
     
-    render(props) {
+    render() {
         const customProps = {
             user: this.state.user,
-            handleLogin: () => this.handleLogin(),
-            handleLogout: () => this.handleLogout(),
-            handleRegister: () => this.handleRegister()
+            handleLogin: (email, username) => this.handleLogin(email, username),
+            handleLogout: () => this.handleLogout()
         }
         return (
             <BrowserRouter>

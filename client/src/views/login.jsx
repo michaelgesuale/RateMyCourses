@@ -2,26 +2,46 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { DefaultLayout } from '../layouts/default';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 export class LoginPage extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: null     
+			email: '',
+			password: ''
 		};
 	}
 
 	componentDidMount() { 
 		fetch('http://localhost:3000/api/test')
 			.then(response => response.json())
-			.then(data => {
-				this.setState({ data: data})
-			}).catch(error => {console.error(error)});
+			.catch(error => {console.error(error)});
 	}
 
+	authenticate() {
+		fetch('http://localhost:3000/api/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: new URLSearchParams(
+				{
+					email: this.state.email,
+					password: this.state.password
+				}
+			),
+		}).then(response => response.json())
+		.then(data => {
+			this.props.customProps.handleLogin(data.email, data.username);
+        }).catch(error => console.log(error));
+    }
+
 	render() {
+		if (this.props.customProps.user) {
+			return <Redirect to="/recommendations"/>;
+		}
 		return <DefaultLayout 
 				{ ...this.props }
 				hideSearch={ true }
@@ -29,10 +49,10 @@ export class LoginPage extends React.Component {
 					<div className="login-container">
 						<h2 className="login-header">Log into your account</h2>
                         <form className="login-form" noValidate autoComplete="off">
-                            <TextField required id="email-field" label="University e-mail" />
-                            <TextField required id="password-field" label="Password" />
+                            <TextField required id="email-field" label="University e-mail" onChange={(event) => this.setState({ email: event.target.value })}/>
+                            <TextField required id="password-field" label="Password" onChange={(event) => this.setState({ password: event.target.value })}/>
                         </form>
-						<Button className="login-button button" variant="contained" color="primary">Login</Button>
+						<Button className="login-button button" variant="contained" color="primary" onClick={() => this.authenticate()}>Login</Button>
 
                         <Link to="/register">
 							<span className="register-text">Don't have an account? Click here to register!</span>
