@@ -9,7 +9,7 @@ export class LikesPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            data: null,
+            data: [],
             loved: true, 
 		}
 	}
@@ -50,7 +50,7 @@ export class LikesPage extends React.Component {
 					<div className="likes-container">
                         <h2 className="likes-header">Liked Courses</h2>
                         {
-                            likedCourses ? (
+                            likedCourses.length ? (
                                 likedCourses.map((course) => {
                                     return <React.Fragment>
                                     <div className="likes-course-name-container" key={ course.name }>
