@@ -280,7 +280,7 @@ export class CoursePage extends React.Component {
                                             </React.Fragment>
                                         )
                                     }
-                                    <SortButton sortValues={ sortValues }></SortButton>
+                                    <SortButton sortValues={ sortValues } sortFunc={() => {return}}></SortButton>
                                 </div>
                             </div>
                             {
