@@ -28,6 +28,7 @@ export class CoursePage extends React.Component {
             showLoginToReview: false,
 	   		showDomainError: false,
             showReviewPopup: false,
+            showReviewSuccess: false,
             sortBy: 'Most recent',
             reviewEnjoyment: 0,
             reviewUsefulness: 0,
@@ -96,6 +97,11 @@ export class CoursePage extends React.Component {
         const showReviewPopup = !this.state.showReviewPopup;
         this.setState({ showReviewPopup });
     }
+
+    toggleReviewSuccess() {
+        const showReviewSuccess = !this.state.showReviewSuccess;
+        this.setState({ showReviewSuccess });
+    }
     
     handleLovedClick() {
         const loved = !this.state.loved;
@@ -146,7 +152,8 @@ export class CoursePage extends React.Component {
 			if (data.status == 400) {
 				this.toggleShowDomainError();
 			} else {
-          			this.updateCourseInfo();
+                  this.updateCourseInfo();
+                  this.toggleReviewSuccess();
 			}
         }).catch(error => {
             console.log(error);
@@ -240,16 +247,20 @@ export class CoursePage extends React.Component {
                                 { <div className="course-prerequisites-container">
                                         <span className="course-prerequisites-title">Prerequisites:</span>
                                         {
-                                            prerequisites.map((prerequisite, index) => {
-                                                return <Link className="course-prerequisite" to={{
-  						pathname: `/course/${ prerequisite.name }`,
-						state: {
-    							course_id: prerequisite.course_id
-  						}
-					    }} key={ prerequisite.course_id }>
-                                                    {`${ prerequisite.name }${ index < prerequisites.length - 1 ? ',' : ''}`}
-                                                </Link>
-                                            })
+                                            prerequisites.length ? (
+                                                prerequisites.map((prerequisite, index) => {
+                                                    return <Link className="course-prerequisite" to={{
+                                                        pathname: `/course/${ prerequisite.name }`,
+                                                        state: {
+                                                                course_id: prerequisite.course_id
+                                                        }
+                                                        }} key={ prerequisite.course_id }>
+                                                        {`${ prerequisite.name }${ index < prerequisites.length - 1 ? ',' : ''}`}
+                                                    </Link>
+                                                })
+                                            ) : (
+                                                <div className="course-no-prerequisite">None</div>
+                                            )
                                         }
                                     </div>
                                 }
@@ -262,6 +273,11 @@ export class CoursePage extends React.Component {
 			                        { this.state.showDomainError && 
                                         <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showDomainError}>
                                             <Alert onClose={() => {this.toggleShowDomainError()}} severity="error">You can only only leave a review if your e-mail domain matches this campus domain.</Alert>
+                                        </Snackbar>
+                                    }
+                                    { this.state.showReviewSuccess && 
+                                        <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showReviewSuccess}>
+                                            <Alert onClose={() => {this.toggleReviewSuccess()}} severity="success">Your review has been posted.</Alert>
                                         </Snackbar>
                                     }
                                 <div className="course-reviews-sort-container" onClick={e => this.sortReviews(e)}>

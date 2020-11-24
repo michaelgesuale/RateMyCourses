@@ -405,6 +405,7 @@ body {
 .catalog-container {
     display: flex;
     margin: 0 auto;
+    margin-bottom: 64px;
     max-width: 1200px;
     padding: 0 32px;
 }
@@ -502,8 +503,16 @@ body {
 
 .course-prerequisite {
     letter-spacing: 1px;
+    color: #747ce0;
+    font-size: 22px;
+    font-family: Raleway;
+    margin-left: 6px;
+}
+
+.course-no-prerequisite {
+    letter-spacing: 1px;
     color: #737070;
-    font-size: 24px;
+    font-size: 22px;
     font-family: Raleway;
     margin-left: 6px;
 }
@@ -518,6 +527,7 @@ body {
 
 .course-reviews-container {
     margin-top: 64px;
+    margin-bottom: 64px;
 }
 
 .course-reviews-title-container {
@@ -770,7 +780,6 @@ body {
     font-family: Raleway;
 }
 
-.recommendations-course-icon-container,
 .liked-course-icon-container {
     margin-left: 20px;
     margin-top: 2px;

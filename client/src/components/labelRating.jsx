@@ -39,10 +39,6 @@ function IconContainer(props) {
 
 export class LabelRating extends React.Component {
 
-	constructor(props) {
-        super(props);
-    }
-
     render() {
         const {
             rating,

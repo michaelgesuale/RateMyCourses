@@ -11,7 +11,8 @@ export class RegisterPage extends React.Component {
 		this.state = {
 			username: '',
 			email: '',
-			password: ''    
+			password: '',
+			confirmPassword: '',
 		};
 	}
 
@@ -54,6 +55,7 @@ export class RegisterPage extends React.Component {
                             <TextField required id="username-field" label="Username" onChange={(event) => this.setState({username: event.target.value})}/>
                             <TextField required id="email-field" label="University e-mail" onChange={(event) => this.setState({email: event.target.value})}/>
                             <TextField required id="password-field" type="password" label="Password" onChange={(event) => this.setState({password: event.target.value})}/>
+							<TextField required id="confirm-password-field" type="password" label="Confirm Password" onChange={(event) => this.setState({confirmPassword: event.target.value})}/>
                         </form>
 						<Button className="register-button button" variant="contained" color="primary" onClick={() => this.handleRegister()}>Register</Button>
 

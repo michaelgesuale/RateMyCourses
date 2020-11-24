@@ -78,10 +78,7 @@ export class LikesPage extends React.Component {
                                                     course_id: course.course_id
                                                 }
                                             }}>{ course.name }</Link>
-                                        <div 
-                                            className="liked-course-icon-container" 
-                                            onClick={e => this.handleLovedClick(e)}
-                                        >
+                                        <div className="liked-course-icon-container" onClick={e => this.handleLovedClick(e)} >
                                             <FavoriteIcon id={course.course_id} className="course-icon"/>
                                         </div>
                                     </div>

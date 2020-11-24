@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom';
 import { SortButton } from './sortButton';
 
 export class Courses extends React.Component {
-
-	constructor(props) {
-		super(props);
-	}
-
+    
     render() {
         const {
             courses
