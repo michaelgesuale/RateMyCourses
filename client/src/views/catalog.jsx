@@ -122,29 +122,6 @@ export class CatalogPage extends React.Component {
 			]
 		}
 
-		const subjects = [
-			'Biology',
-			'Chemistry',
-			'Physics',
-			'Math',
-			'Computer Science',
-			'Art History',
-			'Sociology'
-		]
-
-		const universities = [
-			'Learning U',
-			'WutUni',
-			'University of Toronto'
-		]
-
-		const years = [
-			'1st year',
-			'2nd year',
-			'3rd year',
-			'4th year'
-		]
-
 		const {
 			courses
 		} = this.state;
