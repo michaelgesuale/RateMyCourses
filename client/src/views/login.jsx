@@ -39,8 +39,8 @@ export class LoginPage extends React.Component {
 			),
 		}).then(response => response.json())
 		.then(data => {
-			this.props.customProps.handleLogin(data.email, data.username);
-        }).catch(() => this.setState({ showinvalidCredentialsError: true }))
+			this.props.customProps.handleLogin(data);
+        	}).catch(() => this.setState({ showinvalidCredentialsError: true }))
     }
 
 	render() {

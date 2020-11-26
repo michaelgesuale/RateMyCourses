@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS university, campus, users, courses, likes, prereq, reviews;
+DROP TABLE IF EXISTS university, campus, reviewLikes, users, courses, likes, prereq, reviews;
 
 DROP TRIGGER IF EXISTS update_course_rating_trigger ON reviews;
 
@@ -57,8 +57,16 @@ CREATE TABLE IF NOT EXISTS reviews (
     usefulness int NOT NULL,
     overall numeric NOT NULL,
     likes int NOT NULL DEFAULT 0,
+    created timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(course_id, username),
     CONSTRAINT rating_check CHECK (0 <= workload AND workload <= 5 AND 0 <= enjoyment AND enjoyment <= 5 AND 0 <= difficulty AND difficulty <= 5 AND 0 <= usefulness AND usefulness <= 5 AND 0 <= overall AND overall <= 5)
+);
+
+CREATE TABLE IF NOT EXISTS reviewLikes (
+    user_email text REFERENCES users(email) ON DELETE CASCADE,
+    review_by text REFERENCES users(username) ON DELETE CASCADE,
+    course_id SERIAL REFERENCES courses(course_id) ON DELETE CASCADE,
+    PRIMARY KEY(user_email, review_by, course_id)
 );
 
 CREATE OR REPLACE FUNCTION update_course_rating()
