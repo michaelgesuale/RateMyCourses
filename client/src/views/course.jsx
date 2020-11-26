@@ -25,9 +25,8 @@ export class CoursePage extends React.Component {
             reviews: null,
             prerequisites: null,
             loved: false,
-            helpful: false,
             showLoginToReview: false,
-	   		showDomainError: false,
+	    showDomainError: false,
             showReviewPopup: false,
             showReviewSuccess: false,
             sortBy: 'Most recent',
@@ -35,8 +34,8 @@ export class CoursePage extends React.Component {
             reviewUsefulness: 0,
             reviewDifficulty: 0,
             reviewWorkload: 0,
-            reviewComment: ''
-		};
+            reviewComment: '',
+	};
     }
     
     updateCourseInfo() {
@@ -125,9 +124,39 @@ export class CoursePage extends React.Component {
         });
     }
 
-    handleHelpfulClick() {
-        const helpful = !this.state.helpful;
-        this.setState({ helpful });
+    handleHelpfulClick(username) {
+	const course_id = this.props.location.state.course_id;
+	const remove = this.props.customProps.user.likes.some(e => e.review_by == username && e.course_id == course_id);
+
+	fetch(`http://localhost:3000/api/likeReviews`, {
+            method: remove ? 'DELETE' : 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+		"course_id": this.props.location.state.course_id,
+		"review_by": username,
+		"user_email": this.props.customProps.user.email
+		})
+        }).then(() => {
+		if (remove) {
+			var like_index = this.props.customProps.user.likes.findIndex((e => e.review_by == username && e.course_id == course_id));
+			this.props.customProps.user.likes.splice(like_index, 1);
+		} else {
+			this.props.customProps.user.likes.push({review_by: username, course_id: course_id});
+		}
+		
+		var updated_reviews = this.state.reviews;
+		var review_index = updated_reviews.findIndex((e => e.user_name == username));
+
+		updated_reviews[review_index].helpful = remove ? updated_reviews[review_index].helpful - 1 : updated_reviews[review_index].helpful + 1;
+		
+		this.setState({ reviews: updated_reviews });
+
+		
+	}).catch(error => {
+            console.log(error);
+        });
     }
 
 	handleReviewSubmit() {
@@ -160,6 +189,16 @@ export class CoursePage extends React.Component {
             console.log(error);
             this.setState({ showReviewPopup: false });
         });
+    }
+
+    compareDate(a, b) {
+        if (a.created < b.created){
+            return 1;
+        }
+        if (a.created > b.created){
+            return -1;
+        }
+        return 0;
     }
 
     compareHelpful(a, b) {
@@ -209,7 +248,7 @@ export class CoursePage extends React.Component {
 
         let sortedReviews
         if (this.state.sortBy === 'Most recent') {
-            sortedReviews = reviews
+            sortedReviews = [...reviews].sort(this.compareDate);
         } else if (this.state.sortBy === 'Helpfulness') {
             sortedReviews = [...reviews].sort(this.compareHelpful);
         } else if (this.state.sortBy === 'Overall rating') {
@@ -320,12 +359,12 @@ export class CoursePage extends React.Component {
                                             <div className="course-review-body-container">
                                                 <span className="course-review-body">{ he.decode(review.user_comment) }</span>
                                                 <div className="course-review-helpful-container">
-                                                <span className="course-review-helpful-text">{`${ review.helpful + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
+                                                <span className="course-review-helpful-text">{`${ review.helpful } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
                                                 {
                                                     this.props.customProps.user && (
-                                                        <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick()}>
+                                                        <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick(review.user_name)}>
                                                             {
-                                                                this.state.helpful ? (
+                                                                this.props.customProps.user.likes.some(e => e.review_by == review.user_name && e.course_id == this.props.location.state.course_id) ? (
                                                                     <ThumbUpAltIcon className="course-review-helpful-icon"/>
                                                                 ) : (
                                                                     <ThumbUpAltOutlinedIcon className="course-review-helpful-icon"/>

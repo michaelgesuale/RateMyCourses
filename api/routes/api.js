@@ -40,4 +40,8 @@ router.route('/getLikes')
 router.route('/hasUserLikedCourse')
     .post(db.hasUserLikedCourse)
 
+router.route('/likeReviews')
+    .post(db.likeReview)
+    .delete(db.unlikeReview)
+
 module.exports = router;

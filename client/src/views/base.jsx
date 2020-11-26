@@ -18,10 +18,11 @@ export class Base extends React.Component {
         }
     }
 
-    handleLogin(email, username) {
+    handleLogin(user_data) {
         const user = {
-            email: email,
-            name: username
+            email: user_data.user.email,
+            name: user_data.user.username,
+	    likes: user_data.likes
         }
         this.setState({ user });
     }
@@ -33,7 +34,7 @@ export class Base extends React.Component {
     render() {
         const customProps = {
             user: this.state.user,
-            handleLogin: (email, username) => this.handleLogin(email, username),
+            handleLogin: (user_data) => this.handleLogin(user_data),
             handleLogout: () => this.handleLogout()
         }
         return (

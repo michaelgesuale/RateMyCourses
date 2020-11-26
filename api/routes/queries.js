@@ -9,8 +9,9 @@ const {
 
 //DB Queries
 const getCourse = `SELECT courses.name, campus.name as campus_name, description, year, subject, overall_rating, overall_workload, overall_enjoyment, overall_difficulty, overall_usefulness FROM courses, campus WHERE courses.campus = camp_id AND courses.course_id = $1;`
-const getReviews = `SELECT username as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, likes as helpful FROM reviews WHERE course_id = $1;`
+const getReviews = `SELECT username as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, created, likes as helpful FROM reviews WHERE course_id = $1 ORDER BY likes DESC;`
 const getPrereq = `SELECT courses.course_id, courses.name FROM prereq, courses WHERE courses.course_id = prereq.require AND prereq.course_id = $1;`
+const getLikedReviews = `SELECT review_by, course_id FROM reviewLikes WHERE user_email = $1;`
 
 const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as campus, university.name as university_name, courses.description, year, subject, courses.overall_rating FROM courses, campus, university WHERE campus.university = university.uni_id AND courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 
@@ -51,6 +52,13 @@ SELECT CASE WHEN EXISTS (
 THEN CAST(1 AS BIT)
 ELSE CAST(0 AS BIT) END
 `
+
+const likeReview = 'INSERT INTO reviewlikes(user_email, review_by, course_id) VALUES ($1, $2, $3);'
+const unlikeReview = 'DELETE FROM reviewlikes WHERE user_email = $1 AND review_by = $2 AND course_id = $3;'
+
+const getLikeExists = 'SELECT EXISTS(SELECT 1 from reviewlikes where user_email= $1 AND review_by = $2 AND course_id=$3)'
+
+const updateReivewlikes = 'UPDATE reviews SET likes = likes + $1 WHERE course_id = $2 and username = $3'
 
 // Run Queries here 
 exports.test = [
@@ -220,6 +228,15 @@ exports.likeCourse = [
 	.trim()
 	.escape(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
 			const user_email = await t.one(getUserEmail, [req.body.username]);
 			return await t.any(likeCourse, [user_email.email, req.body.course_id]);
@@ -243,6 +260,15 @@ exports.unlikeCourse = [
 	.trim()
 	.escape(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
 			const user_email = await t.one(getUserEmail, [req.body.username]);
 			return await t.any(unlikeCourse, [user_email.email, req.body.course_id]);
@@ -260,6 +286,15 @@ exports.getLikedCoursesByUser = [
 	.trim()
 	.escape(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
 			const user_email = await t.one(getUserEmail, [req.body.username]);
 			return await t.any(getLikedCoursesByUser, [user_email.email]);
@@ -283,6 +318,14 @@ exports.hasUserLikedCourse = [
 	.trim()
 	.escape(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
 		db.task(async t => {
 			const user_email = await t.one(getUserEmail, [req.body.username]);
 			return await t.any(hasUserLikedCourse, [user_email.email, req.body.course_id]);
@@ -300,6 +343,15 @@ exports.searchCoursesByName = [
 	.trim()
 	.escape(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
 		const nameForQuery = req.params.course_name.toUpperCase().replace(/\s+/g, '')
 		return await t.any(searchCoursesByName, [nameForQuery]);
@@ -320,8 +372,23 @@ exports.login = [
 	.withMessage('Missing password')
 	.bail(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
-		return await t.one(getExistingUser, [req.body.email, req.body.password]);
+		
+		const user = await t.one(getExistingUser, [req.body.email, req.body.password]);
+		const likes = await t.any(getLikedReviews, [req.body.email]);
+
+		result = {user: user, likes: likes};
+
+		return result
 	}).then (result => {
 		res.status(200).json(result);
 	}).catch(() => {res.status(400); res.send("E-mail or password is invalid")})
@@ -344,6 +411,15 @@ exports.register = [
 	.withMessage('Missing password')
 	.bail(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
 		const email = req.body.email;
 		const username = req.body.username;
@@ -362,6 +438,15 @@ exports.getUserRecommendations = [
 	.withMessage('Missing user email')
 	.bail(),
 	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+
 		db.task(async t => {
 		return await t.any(getRecommendedCourses, [req.params.email]);
 	}).then (result => {
@@ -369,3 +454,95 @@ exports.getUserRecommendations = [
 	}).catch(e => {res.status(500); res.send(e)})
   }
 ];
+
+exports.likeReview = [
+	body('course_id')
+	.exists()
+	.withMessage('Missing Course Id Parameter')
+	.bail()
+	.isInt()
+	.withMessage('Invalid Course Id Parameter')
+	.bail(),
+	body('review_by')
+	.exists()
+	.withMessage('Missing Reviewer Parameter')
+	.bail()
+	.matches(/^[a-zA-Z0-9 ]+$/i)
+	.withMessage('Invalid Reviewer Parameter')
+	.bail(),
+	body('user_email')
+	.exists()
+	.withMessage('Missing User Email Parameter')
+	.bail(),
+	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+		db.tx(async t => {
+			
+
+			const q1 = t.none(likeReview, [req.body.user_email, req.body.review_by, req.body.course_id]);
+			const q2 = t.none(updateReivewlikes, [1, req.body.course_id, req.body.review_by]);
+
+			
+			return t.batch([q1, q2]);
+		}).then (result => {
+			res.status(200).end();
+		}).catch(e => {res.status(500); res.send(e)})
+  }
+];
+
+exports.unlikeReview = [
+	body('course_id')
+	.exists()
+	.withMessage('Missing Course Id Parameter')
+	.bail()
+	.isInt()
+	.withMessage('Invalid Course Id Parameter')
+	.bail(),
+	body('review_by')
+	.exists()
+	.withMessage('Missing Reviewer Parameter')
+	.bail()
+	.matches(/^[a-zA-Z0-9 ]+$/i)
+	.withMessage('Invalid Reviewer Parameter')
+	.bail(),
+	body('user_email')
+	.exists()
+	.withMessage('Missing User Email Parameter')
+	.bail(),
+	async function(req, res, next) {
+		// First see if we have any errors
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			// If there are errors. We want to render form again with sanitized values/errors messages.
+			res.status(400).json({ errors: errors.array() });
+			return;
+		}
+
+		db.tx(async t => {
+			const exist = await t.one(getLikeExists, [req.body.user_email, req.body.review_by, req.body.course_id]);
+
+			if (exist.exists) {
+				const q1 = t.none(unlikeReview, [req.body.user_email, req.body.review_by, req.body.course_id]);
+				const q2 = t.none(updateReivewlikes, [-1, req.body.course_id, req.body.review_by]);
+
+				return t.batch([q1, q2]);
+			} else {
+				return null;
+			}
+		}).then (result => {
+			if (result == null) {
+				res.status(404).end();
+			} else {
+				res.status(200).end();
+			}
+		}).catch(e => {res.status(500); res.send(e)})
+  }
+];
+
