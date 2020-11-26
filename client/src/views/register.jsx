@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Alert from '@material-ui/lab/Alert';
 import { DefaultLayout } from '../layouts/default';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -13,7 +14,10 @@ export class RegisterPage extends React.Component {
 			email: '',
 			password: '',
 			confirmPassword: '',
+			showConfirmPasswordError: false,
+			showWhiteSpaceUsernameError: false
 		};
+		this.handleRegister = this.handleRegister.bind(this);
 	}
 
 	componentDidMount() { 
@@ -22,7 +26,21 @@ export class RegisterPage extends React.Component {
 			.catch(error => {console.error(error)});
 	}
 
-	handleRegister(){
+	handleRegister(event){
+		event.preventDefault();
+		let isError = false;
+		const whitespaceUsernameError = !/^\S+$/.test(this.state.username);
+		this.setState({ showWhiteSpaceUsernameError: whitespaceUsernameError });
+		isError = isError || whitespaceUsernameError;
+		
+		const confirmPasswordMismatch = this.state.password !== this.state.confirmPassword;
+		this.setState({ showConfirmPasswordError: confirmPasswordMismatch });
+		isError = isError || confirmPasswordMismatch;
+
+		if (isError){
+			return;
+		}
+		
 		fetch('http://localhost:3000/api/register', {
 			method: 'POST',
 			headers: {
@@ -51,13 +69,19 @@ export class RegisterPage extends React.Component {
 				content={
 					<div className="register-container">
 						<h2 className="register-header">Create an account</h2>
-                        <form className="register-form" noValidate autoComplete="off">
-                            <TextField required id="username-field" label="Username" onChange={(event) => this.setState({username: event.target.value})}/>
-                            <TextField required id="email-field" label="University e-mail" onChange={(event) => this.setState({email: event.target.value})}/>
+                        <form id="register-form" className="register-form" autoComplete="off" onSubmit={this.handleRegister}>
+                            <TextField required id="username-field" label="Username"  pattern="[a-z]" onChange={(event) => this.setState({username: event.target.value})}/>
+							{ this.state.showWhiteSpaceUsernameError && 
+                                <Alert onClose={() => {this.setState({ showWhiteSpaceUsernameError: false })}} severity="error">Username must not contain spaces</Alert>
+                        	}
+                            <TextField required id="email-field" type="email" label="University e-mail" onChange={(event) => this.setState({email: event.target.value})}/>
                             <TextField required id="password-field" type="password" label="Password" onChange={(event) => this.setState({password: event.target.value})}/>
 							<TextField required id="confirm-password-field" type="password" label="Confirm Password" onChange={(event) => this.setState({confirmPassword: event.target.value})}/>
-                        </form>
-						<Button className="register-button button" variant="contained" color="primary" onClick={() => this.handleRegister()}>Register</Button>
+							{ this.state.showConfirmPasswordError && 
+                                <Alert onClose={() => {this.setState({ showConfirmPasswordError: false })}} severity="error">Confirm Password doesn't match Password</Alert>
+                        	}
+						</form>
+						<Button type="submit" form="register-form" className="register-button button" variant="contained" color="primary">Register</Button>
 
                         <Link to="/login">
 							<span className="login-text">Already have an account? Click here to login!</span>
