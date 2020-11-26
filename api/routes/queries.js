@@ -425,7 +425,10 @@ exports.register = [
 		const username = req.body.username;
 		const password = req.body.password;
 		await t.none(insertUser, [email, username, password]);
-		return t.one(getExistingUser, [email, password]);
+		const user = await t.one(getExistingUser, [req.body.email, req.body.password]);
+		const likes = await t.any(getLikedReviews, [req.body.email]);
+		result = {user: user, likes: likes};
+		return result
 	}).then (result => {
 		res.status(200).json(result);
 	}).catch(() => {res.status(400); res.send("E-mail already registered or username already taken")})

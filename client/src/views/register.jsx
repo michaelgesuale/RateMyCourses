@@ -55,7 +55,7 @@ export class RegisterPage extends React.Component {
 			),
 		}).then(response => response.json())
 		.then(data => {
-			this.props.customProps.handleLogin(data.email, data.username);
+			this.props.customProps.handleLogin(data);
         }).catch(error => console.log(error));
 	}
 
