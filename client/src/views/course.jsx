@@ -14,6 +14,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Alert from '@material-ui/lab/Alert';
+import he from 'he';
 
 export class CoursePage extends React.Component {
 
@@ -317,7 +318,7 @@ export class CoursePage extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="course-review-body-container">
-                                                <span className="course-review-body">{ review.user_comment }</span>
+                                                <span className="course-review-body">{ he.decode(review.user_comment) }</span>
                                                 <div className="course-review-helpful-container">
                                                 <span className="course-review-helpful-text">{`${ review.helpful + (this.state.helpful ? 1 : 0) } user${ review.helpful !== 1 ? 's' : '' } found this helpful!` }</span>
                                                 {
