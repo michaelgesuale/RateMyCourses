@@ -7,7 +7,7 @@
     "npm": "6.4.1"
   },
   "scripts": {
-    "start": "cd api && node ./bin/www && cd client && react-scripts start"
+    "start": "cd api && npm install && cd client && npm install --only-dev && npm install && npm run build && cd api && node ./bin/www && cd client && react-scripts start"
   },
   "heroku-postbuild": "cd api && npm install && cd client && npm install --only-dev && npm install && npm run build"
 }
