@@ -20,9 +20,8 @@ export class Base extends React.Component {
 
     handleLogin(user_data) {
         const user = {
-            email: user_data.user.email,
-            name: user_data.user.username,
-	    likes: user_data.likes
+            email: user_data.email,
+            name: user_data.username,
         }
         this.setState({ user });
     }

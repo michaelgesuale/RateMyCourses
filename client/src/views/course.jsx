@@ -23,6 +23,7 @@ export class CoursePage extends React.Component {
 		this.state = {
             course: null,
             reviews: null,
+	    likedReviews: null,
             prerequisites: null,
             loved: false,
             showLoginToReview: false,
@@ -39,11 +40,20 @@ export class CoursePage extends React.Component {
     }
     
     updateCourseInfo() {
-        fetch(`http://localhost:3000/api/course/${this.props.location.state.course_id}`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq})
-            }).catch(error => console.log(error));
+	fetch(`http://localhost:3000/api/course`, {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/x-www-form-urlencoded'
+               },
+                body: new URLSearchParams(
+                    {
+                        email: this.props.customProps.user ? this.props.customProps.user.email : '',
+                        course_id: this.props.location.state.course_id,
+                    })
+		}).then(response => response.json())
+                 .then(data => {
+                this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq, likedReviews: data.likedReviews})
+            }).catch(error => console.log(error));	
     }
 
     displayLiked() {
@@ -126,7 +136,7 @@ export class CoursePage extends React.Component {
 
     handleHelpfulClick(username) {
 	const course_id = this.props.location.state.course_id;
-	const remove = this.props.customProps.user.likes.some(e => e.review_by == username && e.course_id == course_id);
+	const remove = this.state.likedReviews.some(e => e.review_by == username);
 
 	fetch(`http://localhost:3000/api/likeReviews`, {
             method: remove ? 'DELETE' : 'POST',
@@ -139,11 +149,13 @@ export class CoursePage extends React.Component {
 		"user_email": this.props.customProps.user.email
 		})
         }).then(() => {
+		var likedReviews = this.state.likedReviews;
+	
 		if (remove) {
-			var like_index = this.props.customProps.user.likes.findIndex((e => e.review_by == username && e.course_id == course_id));
-			this.props.customProps.user.likes.splice(like_index, 1);
+			var like_index = likedReviews.findIndex((e => e.review_by == username && e.course_id == course_id));
+			likedReviews.splice(like_index, 1);
 		} else {
-			this.props.customProps.user.likes.push({review_by: username, course_id: course_id});
+			likedReviews.push({review_by: username, course_id: course_id});
 		}
 		
 		var updated_reviews = this.state.reviews;
@@ -151,7 +163,7 @@ export class CoursePage extends React.Component {
 
 		updated_reviews[review_index].helpful = remove ? updated_reviews[review_index].helpful - 1 : updated_reviews[review_index].helpful + 1;
 		
-		this.setState({ reviews: updated_reviews });
+		this.setState({ reviews: updated_reviews, likedReviews:likedReviews });
 
 		
 	}).catch(error => {
@@ -364,7 +376,7 @@ export class CoursePage extends React.Component {
                                                     this.props.customProps.user && (
                                                         <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick(review.user_name)}>
                                                             {
-                                                                this.props.customProps.user.likes.some(e => e.review_by == review.user_name && e.course_id == this.props.location.state.course_id) ? (
+                                                                this.state.likedReviews.some(e => e.review_by == review.user_name) ? (
                                                                     <ThumbUpAltIcon className="course-review-helpful-icon"/>
                                                                 ) : (
                                                                     <ThumbUpAltOutlinedIcon className="course-review-helpful-icon"/>
