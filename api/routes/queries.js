@@ -431,7 +431,7 @@ exports.register = [
 		return result
 	}).then (result => {
 		res.status(200).json(result);
-	}).catch(() => {res.status(400); res.send("E-mail already registered or username already taken")})
+	}).catch((e) => {res.status(400); res.send(e)})
 	}
 ];
 
