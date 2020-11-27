@@ -1,0 +1,9 @@
+{
+  "name": "ratemycourses",
+  "version": "1.0.0",
+  "description": "RateMyCourses app for CSC490",
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.4.1"
+  }
+}
