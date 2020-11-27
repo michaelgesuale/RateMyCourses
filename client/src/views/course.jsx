@@ -30,6 +30,7 @@ export class CoursePage extends React.Component {
 	    showDomainError: false,
             showReviewPopup: false,
             showReviewSuccess: false,
+            showDuplicateReviewError: false,
             sortBy: 'Most recent',
             reviewEnjoyment: 0,
             reviewUsefulness: 0,
@@ -97,6 +98,12 @@ export class CoursePage extends React.Component {
         this.setState({ showLoginToReview });
         console.log(showLoginToReview)
     }
+
+    toggleShowDuplicateReviewError() {
+        const showDuplicateReviewError = !this.state.showDuplicateReviewError;
+        this.setState({ showDuplicateReviewError });
+    }
+
 
     toggleShowDomainError() {
         const showDomainError = !this.state.showDomainError;
@@ -193,9 +200,11 @@ export class CoursePage extends React.Component {
 
 			if (data.status == 400) {
 				this.toggleShowDomainError();
+			} else if (data.status == 403) { 
+				this.toggleShowDuplicateReviewError();
 			} else {
-                  this.updateCourseInfo();
-                  this.toggleReviewSuccess();
+                this.updateCourseInfo();
+                this.toggleReviewSuccess();
 			}
         }).catch(error => {
             console.log(error);
@@ -325,6 +334,11 @@ export class CoursePage extends React.Component {
 			                        { this.state.showDomainError && 
                                         <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showDomainError}>
                                             <Alert onClose={() => {this.toggleShowDomainError()}} severity="error">You can only only leave a review if your e-mail domain matches this campus domain.</Alert>
+                                        </Snackbar>
+                                    }
+			                        { this.state.showDuplicateReviewError && 
+                                        <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showDuplicateReviewError}>
+                                            <Alert onClose={() => {this.toggleShowDuplicateReviewError()}} severity="error">You can only leave a review for a course once</Alert>
                                         </Snackbar>
                                     }
                                     { this.state.showReviewSuccess && 
