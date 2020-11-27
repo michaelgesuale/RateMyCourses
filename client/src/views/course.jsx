@@ -280,7 +280,7 @@ export class CoursePage extends React.Component {
                                 <LabelRating label="Overall rating" rating={ course.overall_rating }></LabelRating>
                                 <LabelRating label="Enjoyment rating" rating={ course.overall_enjoyment }></LabelRating>
                                 <LabelRating label="Usefulness rating" rating={ course.overall_usefulness }></LabelRating>
-                                <LabelRating label="Difficulty rating" rating={ course.overall_difficulty }></LabelRating>
+                                <LabelRating label="Easiness rating" rating={ course.overall_difficulty }></LabelRating>
                                 <LabelRating label="Workload rating" rating={ course.overall_workload }></LabelRating>
                             </div>
                             <div className="course-description-container">
@@ -352,7 +352,7 @@ export class CoursePage extends React.Component {
                                                     <LabelRating label="Overall rating" rating={ review.overall }></LabelRating>
                                                     <LabelRating label="Enjoyment rating" rating={ review.enjoyment }></LabelRating>
                                                     <LabelRating label="Usefulness rating" rating={ review.usefulness }></LabelRating>
-                                                    <LabelRating label="Difficulty rating" rating={ review.difficulty }></LabelRating>
+                                                    <LabelRating label="Easiness rating" rating={ review.difficulty }></LabelRating>
                                                     <LabelRating label="Workload rating" rating={ review.workload }></LabelRating>
                                                 </div>
                                             </div>
@@ -388,7 +388,7 @@ export class CoursePage extends React.Component {
                                 <div className="course-review-popup-left">
                                     <LabelRating label="Enjoyment rating" rating={ this.state.reviewEnjoyment } onClick={(value) => this.setState({ reviewEnjoyment: value })}></LabelRating>
                                     <LabelRating label="Usefulness rating" rating={ this.state.reviewUsefulness } onClick={(value) => this.setState({ reviewUsefulness: value })}></LabelRating>
-                                    <LabelRating label="Difficulty rating" rating={ this.state.reviewDifficulty } onClick={(value) => this.setState({ reviewDifficulty: value })}></LabelRating>
+                                    <LabelRating label="Easiness rating" rating={ this.state.reviewDifficulty } onClick={(value) => this.setState({ reviewDifficulty: value })}></LabelRating>
                                     <LabelRating label="Workload rating" rating={ this.state.reviewWorkload } onClick={(value) => this.setState({ reviewWorkload: value })}></LabelRating>
                                 </div>
                                 <div className="course-review-popup-right">
