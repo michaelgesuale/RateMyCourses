@@ -5,5 +5,9 @@
   "engines": {
     "node": "10.15.3",
     "npm": "6.4.1"
-  }
+  },
+  "scripts": {
+    "start": "cd api && node ./bin/www && cd client && react-scripts start"
+  },
+  "heroku-postbuild": "npm install && cd client && npm install --only-dev && npm install && npm run build"
 }
