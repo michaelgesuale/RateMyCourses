@@ -110,9 +110,9 @@ export class CatalogPage extends React.Component {
 				'Sociology'
 			],
 			'University': [
-				'Learning U',
-				'WutUni',
-				'University of Toronto'
+				'Ryerson University',
+				'University of Toronto',
+				'University of Waterloo',
 			],
 			'Year': [
 				'1st year',
