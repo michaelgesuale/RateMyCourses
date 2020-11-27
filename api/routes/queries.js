@@ -192,7 +192,6 @@ exports.postReview = [
 		
 		return await t.one(insertReview, [req.body.course_id , req.body.username, req.body.user_comment, req.body.workload, req.body.enjoyment, req.body.difficulty, req.body.usefulness, overall]);
 	}).then (result => {
-		console.log(result)
 	   if (result == null) {
 		   res.status(400).end();
 		} else if ('course_id' in result && 'username' in result) {
