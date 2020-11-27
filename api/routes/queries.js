@@ -11,7 +11,7 @@ const {
 const getCourse = `SELECT courses.name, campus.name as campus_name, description, year, subject, overall_rating, overall_workload, overall_enjoyment, overall_difficulty, overall_usefulness FROM courses, campus WHERE courses.campus = camp_id AND courses.course_id = $1;`
 const getReviews = `SELECT username as user_name, user_comment, overall, workload, enjoyment, difficulty, usefulness, created, likes as helpful FROM reviews WHERE course_id = $1 ORDER BY likes DESC;`
 const getPrereq = `SELECT courses.course_id, courses.name FROM prereq, courses WHERE courses.course_id = prereq.require AND prereq.course_id = $1;`
-const getLikedReviews = `SELECT review_by, course_id FROM reviewLikes WHERE user_email = $1;`
+const getLikedReviews = `SELECT review_by FROM reviewLikes WHERE user_email = $1 AND course_id = $2;`
 
 const getAllCourses = `SELECT courses.course_id, courses.name, campus.name as campus, university.name as university_name, courses.description, year, subject, courses.overall_rating FROM courses, campus, university WHERE campus.university = university.uni_id AND courses.campus = campus.camp_id ORDER BY overall_rating DESC;`
 
@@ -71,7 +71,7 @@ exports.test = [
 ];
 
 exports.getCourseInfo = [
-	param('course_id')
+	body('course_id')
 	.exists()
 	.withMessage('Missing Course Id Parameter')
 	.bail()
@@ -84,19 +84,28 @@ exports.getCourseInfo = [
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			// If there are errors. We want to render form again with sanitized values/errors messages.
+			console.log(errors)
 			res.status(400).json({ errors: errors.array() });
 			return;
 		}
 		
-		db.task(async t => {	
-		const courseResult = await t.one(getCourse, [req.params.course_id]);
-		const reviewResults = await t.any(getReviews, [req.params.course_id]);
-		const prereqResults = await t.any(getPrereq, [req.params.course_id]);
+		db.task(async t => {
+		const courseResult = await t.one(getCourse, [req.body.course_id]);
+		const reviewResults = await t.any(getReviews, [req.body.course_id]);
+		const prereqResults = await t.any(getPrereq, [req.body.course_id]);
+		
+		var likedReviews;
+		if (req.body.email == '') {
+			likedReviews = [];
+		} else {
+			likedReviews = await t.any(getLikedReviews, [req.body.email, req.body.course_id]);
+		}
 
 		result = {
 			  course: courseResult,
 			  reviews: reviewResults,
-			  prereq: prereqResults
+			  prereq: prereqResults,
+			  likedReviews: likedReviews
 			 }
 
 		return result
@@ -382,13 +391,7 @@ exports.login = [
 
 
 		db.task(async t => {
-		
-		const user = await t.one(getExistingUser, [req.body.email, req.body.password]);
-		const likes = await t.any(getLikedReviews, [req.body.email]);
-
-		result = {user: user, likes: likes};
-
-		return result
+		return await t.one(getExistingUser, [req.body.email, req.body.password]);
 	}).then (result => {
 		res.status(200).json(result);
 	}).catch(() => {res.status(400); res.send("E-mail or password is invalid")})
@@ -425,13 +428,10 @@ exports.register = [
 		const username = req.body.username;
 		const password = req.body.password;
 		await t.none(insertUser, [email, username, password]);
-		const user = await t.one(getExistingUser, [req.body.email, req.body.password]);
-		const likes = await t.any(getLikedReviews, [req.body.email]);
-		result = {user: user, likes: likes};
-		return result
+		return await t.one(getExistingUser, [req.body.email, req.body.password]);
 	}).then (result => {
 		res.status(200).json(result);
-	}).catch(() => {res.status(400); res.send("E-mail already registered or username already taken")})
+	}).catch((e) => {res.status(400); res.send(e)})
 	}
 ];
 

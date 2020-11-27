@@ -15,7 +15,9 @@ export class RegisterPage extends React.Component {
 			password: '',
 			confirmPassword: '',
 			showConfirmPasswordError: false,
-			showWhiteSpaceUsernameError: false
+			showWhiteSpaceUsernameError: false,
+			showUsernameTakenError: false,
+			showEmailTakenError: false
 		};
 		this.handleRegister = this.handleRegister.bind(this);
 	}
@@ -26,8 +28,27 @@ export class RegisterPage extends React.Component {
 			.catch(error => {console.error(error)});
 	}
 
+	handleRegistrationResponse(data){
+		if (data.status === 400){
+			data.json().then(data => {
+				if (data.detail.includes("email")){
+					this.setState({ showEmailTakenError: true });
+				} else if (data.detail.includes("username")){
+					this.setState({ showUsernameTakenError: true });
+				}
+			});
+		} else {
+			data.json().then(data => {
+				this.props.customProps.handleLogin(data);
+			})
+		}
+	}
+
 	handleRegister(event){
 		event.preventDefault();
+		this.setState({ showUsernameTakenError: false });
+		this.setState({ showEmailTakenError: false });
+
 		let isError = false;
 		const whitespaceUsernameError = !/^\S+$/.test(this.state.username);
 		this.setState({ showWhiteSpaceUsernameError: whitespaceUsernameError });
@@ -53,9 +74,8 @@ export class RegisterPage extends React.Component {
 					password: this.state.password
 				}
 			),
-		}).then(response => response.json())
-		.then(data => {
-			this.props.customProps.handleLogin(data);
+		}).then(data => {
+			this.handleRegistrationResponse(data);
         }).catch(error => console.log(error));
 	}
 
@@ -74,7 +94,13 @@ export class RegisterPage extends React.Component {
 							{ this.state.showWhiteSpaceUsernameError && 
                                 <Alert onClose={() => {this.setState({ showWhiteSpaceUsernameError: false })}} severity="error">Username must not contain spaces</Alert>
                         	}
+							{ this.state.showUsernameTakenError && 
+                                <Alert onClose={() => {this.setState({ showUsernameTakenError: false })}} severity="error">Username is taken</Alert>
+                        	}
                             <TextField required id="email-field" type="email" label="University e-mail" onChange={(event) => this.setState({email: event.target.value})}/>
+							{ this.state.showEmailTakenError && 
+                                <Alert onClose={() => {this.setState({ showEmailTakenError: false })}} severity="error">E-mail is already registered</Alert>
+                        	}
                             <TextField required id="password-field" type="password" label="Password" onChange={(event) => this.setState({password: event.target.value})}/>
 							<TextField required id="confirm-password-field" type="password" label="Confirm Password" onChange={(event) => this.setState({confirmPassword: event.target.value})}/>
 							{ this.state.showConfirmPasswordError && 

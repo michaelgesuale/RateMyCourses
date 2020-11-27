@@ -24,7 +24,7 @@ INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, diff
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (2, 'Sam', 'Lots of homework, lots of work and quizzes. this course completely destroyed my summer, my sanity and my GPA', 1, 1, 1, 1, 1);
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (3, 'Sam', 'Fair course, the professor was really nice but the assignments were kind of hard if you dont go to lecture', 4, 3, 3, 2, 3);
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (4, 'Sam', 'Great course, I learnt a lot and this is very applicable to real life', 4, 4, 3, 5, 4);
-INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (5, 'Sam', 'Great course, I learnt a lot and this is very applicable to real life', 5, 5, 5, 5, 5);
+INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall, likes) VALUES (5, 'Sam', 'Great course, I learnt a lot and this is very applicable to real life', 5, 5, 5, 5, 5, 1);
 
 
 INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES (1, 'Clover', 'The most straightforward class ive ever taken. ', 5, 5, 5, 5, 5);
