@@ -75,6 +75,24 @@ export class CoursePage extends React.Component {
         this.displayLiked();
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.sortBy === prevState.sortBy) {
+            return
+        }
+        
+        let sortedReviews
+        
+        if (this.state.sortBy === 'Most recent') {
+            sortedReviews = [...this.state.reviews].sort(this.compareDate);
+        } else if (this.state.sortBy === 'Helpfulness') {
+            sortedReviews = [...this.state.reviews].sort(this.compareHelpful);
+        } else if (this.state.sortBy === 'Overall rating') {
+            sortedReviews = [...this.state.reviews].sort(this.compareOverall); 
+        }
+
+        this.setState({ reviews: sortedReviews })
+    }
+
     sortReviews(event) {
         const sortBy = event.target.id
         if (sortBy) {
@@ -245,15 +263,6 @@ export class CoursePage extends React.Component {
                     }
             />
         }
-
-        let sortedReviews
-        if (this.state.sortBy === 'Most recent') {
-            sortedReviews = [...reviews].sort(this.compareDate);
-        } else if (this.state.sortBy === 'Helpfulness') {
-            sortedReviews = [...reviews].sort(this.compareHelpful);
-        } else if (this.state.sortBy === 'Overall rating') {
-            sortedReviews = [...reviews].sort(this.compareOverall); 
-        }
         
 		return <DefaultLayout 
 				{ ...this.props }
@@ -340,8 +349,8 @@ export class CoursePage extends React.Component {
                                 </div>
                             </div>
                             {
-                                sortedReviews.length ? (
-                                    sortedReviews.map((review, index) => {
+                                reviews.length ? (
+                                    reviews.map((review, index) => {
                                         return <div className="course-review-container" key={`course-review-${ index + 1 }`}>
                                             <div className="course-review-user-container">
                                                 <div className="course-review-user">

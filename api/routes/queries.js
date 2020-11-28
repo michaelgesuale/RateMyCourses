@@ -20,7 +20,7 @@ const getUserEmail = `SELECT email from users WHERE username=$1`
 	
 const insertReview = `INSERT INTO reviews(course_id, username, user_comment, workload, enjoyment, difficulty, usefulness, overall) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING course_id, username;`
 const searchCoursesByName = `SELECT courses.name, courses.course_id, campus.name as campus, courses.description, courses.overall_rating
-	FROM courses, campus WHERE courses.campus = campus.camp_id AND courses.name = $1 ORDER BY overall_rating DESC;`
+	FROM courses, campus WHERE courses.campus = campus.camp_id AND courses.name LIKE '%' || $1 || '%' ORDER BY overall_rating DESC;`
 
 const getExistingUser = `SELECT email, username FROM users WHERE email=$1 AND password=$2;`
 
