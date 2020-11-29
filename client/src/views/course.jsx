@@ -23,12 +23,14 @@ export class CoursePage extends React.Component {
 		this.state = {
             course: null,
             reviews: null,
+	    likedReviews: null,
             prerequisites: null,
             loved: false,
             showLoginToReview: false,
 	    showDomainError: false,
             showReviewPopup: false,
             showReviewSuccess: false,
+            showDuplicateReviewError: false,
             sortBy: 'Most recent',
             reviewEnjoyment: 0,
             reviewUsefulness: 0,
@@ -39,11 +41,20 @@ export class CoursePage extends React.Component {
     }
     
     updateCourseInfo() {
-        fetch(`http://localhost:3000/api/course/${this.props.location.state.course_id}`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq})
-            }).catch(error => console.log(error));
+	fetch(`http://localhost:3000/api/course`, {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/x-www-form-urlencoded'
+               },
+                body: new URLSearchParams(
+                    {
+                        email: this.props.customProps.user ? this.props.customProps.user.email : '',
+                        course_id: this.props.location.state.course_id,
+                    })
+		}).then(response => response.json())
+                 .then(data => {
+                this.setState({course: data.course, reviews: data.reviews, prerequisites: data.prereq, likedReviews: data.likedReviews})
+            }).catch(error => console.log(error));	
     }
 
     displayLiked() {
@@ -75,6 +86,24 @@ export class CoursePage extends React.Component {
         this.displayLiked();
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.sortBy === prevState.sortBy) {
+            return
+        }
+        
+        let sortedReviews
+        
+        if (this.state.sortBy === 'Most recent') {
+            sortedReviews = [...this.state.reviews].sort(this.compareDate);
+        } else if (this.state.sortBy === 'Helpfulness') {
+            sortedReviews = [...this.state.reviews].sort(this.compareHelpful);
+        } else if (this.state.sortBy === 'Overall rating') {
+            sortedReviews = [...this.state.reviews].sort(this.compareOverall); 
+        }
+
+        this.setState({ reviews: sortedReviews })
+    }
+
     sortReviews(event) {
         const sortBy = event.target.id
         if (sortBy) {
@@ -87,6 +116,12 @@ export class CoursePage extends React.Component {
         this.setState({ showLoginToReview });
         console.log(showLoginToReview)
     }
+
+    toggleShowDuplicateReviewError() {
+        const showDuplicateReviewError = !this.state.showDuplicateReviewError;
+        this.setState({ showDuplicateReviewError });
+    }
+
 
     toggleShowDomainError() {
         const showDomainError = !this.state.showDomainError;
@@ -126,7 +161,7 @@ export class CoursePage extends React.Component {
 
     handleHelpfulClick(username) {
 	const course_id = this.props.location.state.course_id;
-	const remove = this.props.customProps.user.likes.some(e => e.review_by == username && e.course_id == course_id);
+	const remove = this.state.likedReviews.some(e => e.review_by == username);
 
 	fetch(`http://localhost:3000/api/likeReviews`, {
             method: remove ? 'DELETE' : 'POST',
@@ -139,11 +174,13 @@ export class CoursePage extends React.Component {
 		"user_email": this.props.customProps.user.email
 		})
         }).then(() => {
+		var likedReviews = this.state.likedReviews;
+	
 		if (remove) {
-			var like_index = this.props.customProps.user.likes.findIndex((e => e.review_by == username && e.course_id == course_id));
-			this.props.customProps.user.likes.splice(like_index, 1);
+			var like_index = likedReviews.findIndex((e => e.review_by == username && e.course_id == course_id));
+			likedReviews.splice(like_index, 1);
 		} else {
-			this.props.customProps.user.likes.push({review_by: username, course_id: course_id});
+			likedReviews.push({review_by: username, course_id: course_id});
 		}
 		
 		var updated_reviews = this.state.reviews;
@@ -151,7 +188,7 @@ export class CoursePage extends React.Component {
 
 		updated_reviews[review_index].helpful = remove ? updated_reviews[review_index].helpful - 1 : updated_reviews[review_index].helpful + 1;
 		
-		this.setState({ reviews: updated_reviews });
+		this.setState({ reviews: updated_reviews, likedReviews:likedReviews });
 
 		
 	}).catch(error => {
@@ -181,9 +218,11 @@ export class CoursePage extends React.Component {
 
 			if (data.status == 400) {
 				this.toggleShowDomainError();
+			} else if (data.status == 403) { 
+				this.toggleShowDuplicateReviewError();
 			} else {
-                  this.updateCourseInfo();
-                  this.toggleReviewSuccess();
+                this.updateCourseInfo();
+                this.toggleReviewSuccess();
 			}
         }).catch(error => {
             console.log(error);
@@ -245,15 +284,6 @@ export class CoursePage extends React.Component {
                     }
             />
         }
-
-        let sortedReviews
-        if (this.state.sortBy === 'Most recent') {
-            sortedReviews = [...reviews].sort(this.compareDate);
-        } else if (this.state.sortBy === 'Helpfulness') {
-            sortedReviews = [...reviews].sort(this.compareHelpful);
-        } else if (this.state.sortBy === 'Overall rating') {
-            sortedReviews = [...reviews].sort(this.compareOverall); 
-        }
         
 		return <DefaultLayout 
 				{ ...this.props }
@@ -280,7 +310,7 @@ export class CoursePage extends React.Component {
                                 <LabelRating label="Overall rating" rating={ course.overall_rating }></LabelRating>
                                 <LabelRating label="Enjoyment rating" rating={ course.overall_enjoyment }></LabelRating>
                                 <LabelRating label="Usefulness rating" rating={ course.overall_usefulness }></LabelRating>
-                                <LabelRating label="Difficulty rating" rating={ course.overall_difficulty }></LabelRating>
+                                <LabelRating label="Easiness rating" rating={ course.overall_difficulty }></LabelRating>
                                 <LabelRating label="Workload rating" rating={ course.overall_workload }></LabelRating>
                             </div>
                             <div className="course-description-container">
@@ -315,6 +345,11 @@ export class CoursePage extends React.Component {
                                             <Alert onClose={() => {this.toggleShowDomainError()}} severity="error">You can only only leave a review if your e-mail domain matches this campus domain.</Alert>
                                         </Snackbar>
                                     }
+			                        { this.state.showDuplicateReviewError && 
+                                        <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showDuplicateReviewError}>
+                                            <Alert onClose={() => {this.toggleShowDuplicateReviewError()}} severity="error">You can only leave a review for a course once</Alert>
+                                        </Snackbar>
+                                    }
                                     { this.state.showReviewSuccess && 
                                         <Snackbar anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } } open={this.state.showReviewSuccess}>
                                             <Alert onClose={() => {this.toggleReviewSuccess()}} severity="success">Your review has been posted.</Alert>
@@ -340,8 +375,8 @@ export class CoursePage extends React.Component {
                                 </div>
                             </div>
                             {
-                                sortedReviews.length ? (
-                                    sortedReviews.map((review, index) => {
+                                reviews.length ? (
+                                    reviews.map((review, index) => {
                                         return <div className="course-review-container" key={`course-review-${ index + 1 }`}>
                                             <div className="course-review-user-container">
                                                 <div className="course-review-user">
@@ -352,7 +387,7 @@ export class CoursePage extends React.Component {
                                                     <LabelRating label="Overall rating" rating={ review.overall }></LabelRating>
                                                     <LabelRating label="Enjoyment rating" rating={ review.enjoyment }></LabelRating>
                                                     <LabelRating label="Usefulness rating" rating={ review.usefulness }></LabelRating>
-                                                    <LabelRating label="Difficulty rating" rating={ review.difficulty }></LabelRating>
+                                                    <LabelRating label="Easiness rating" rating={ review.difficulty }></LabelRating>
                                                     <LabelRating label="Workload rating" rating={ review.workload }></LabelRating>
                                                 </div>
                                             </div>
@@ -364,7 +399,7 @@ export class CoursePage extends React.Component {
                                                     this.props.customProps.user && (
                                                         <div className="course-review-helpful-icon-container" onClick={() => this.handleHelpfulClick(review.user_name)}>
                                                             {
-                                                                this.props.customProps.user.likes.some(e => e.review_by == review.user_name && e.course_id == this.props.location.state.course_id) ? (
+                                                                this.state.likedReviews.some(e => e.review_by == review.user_name) ? (
                                                                     <ThumbUpAltIcon className="course-review-helpful-icon"/>
                                                                 ) : (
                                                                     <ThumbUpAltOutlinedIcon className="course-review-helpful-icon"/>
@@ -388,7 +423,7 @@ export class CoursePage extends React.Component {
                                 <div className="course-review-popup-left">
                                     <LabelRating label="Enjoyment rating" rating={ this.state.reviewEnjoyment } onClick={(value) => this.setState({ reviewEnjoyment: value })}></LabelRating>
                                     <LabelRating label="Usefulness rating" rating={ this.state.reviewUsefulness } onClick={(value) => this.setState({ reviewUsefulness: value })}></LabelRating>
-                                    <LabelRating label="Difficulty rating" rating={ this.state.reviewDifficulty } onClick={(value) => this.setState({ reviewDifficulty: value })}></LabelRating>
+                                    <LabelRating label="Easiness rating" rating={ this.state.reviewDifficulty } onClick={(value) => this.setState({ reviewDifficulty: value })}></LabelRating>
                                     <LabelRating label="Workload rating" rating={ this.state.reviewWorkload } onClick={(value) => this.setState({ reviewWorkload: value })}></LabelRating>
                                 </div>
                                 <div className="course-review-popup-right">

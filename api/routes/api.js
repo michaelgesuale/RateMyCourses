@@ -7,8 +7,8 @@ const db = require('./queries');
 router.route('/test')
     .get(db.test)
 
-router.route('/course/:course_id')
-    .get(db.getCourseInfo)
+router.route('/course')
+    .post(db.getCourseInfo)
     
 router.route('/courses')
     .get(db.getCourses)
