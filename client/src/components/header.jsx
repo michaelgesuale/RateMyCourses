@@ -59,7 +59,10 @@ export class Header extends React.Component {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <Link to="/login">
+                            <Link to={{
+                                pathname: "/login",
+                                state: { prevPage: this.props.location.pathname }
+                            }}>
                                 <Button className="header-button button" variant="contained" color="secondary">Login</Button>
                             </Link>
                             <Link to="/register">

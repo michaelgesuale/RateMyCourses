@@ -42,7 +42,7 @@ export class Base extends React.Component {
                 <Switch>
                     <Route path="/login" render={(props) => (<LoginPage {...props} customProps={customProps} />)}></Route>
                     <Route path="/register" render={(props) => (<RegisterPage {...props} customProps={customProps} />)}></Route>
-                    <Route path="/course/:id" render={(props) => (<CoursePage {...props} customProps={customProps} key={props.location.state.course_id}/>)}></Route>
+                    <Route path="/course/:name" render={(props) => (<CoursePage {...props} customProps={customProps} key={props.location.state.course_id}/>)}></Route>
                     <Route path="/catalog" render={(props) => (<CatalogPage {...props} customProps={customProps} />)}></Route>
                     <Route path="/likes" render={(props) => (<LikesPage {...props} customProps={customProps} />)}></Route>
                     <Route path="/recommendations" render={(props) => (<RecommendationsPage {...props} customProps={customProps} />)}></Route>

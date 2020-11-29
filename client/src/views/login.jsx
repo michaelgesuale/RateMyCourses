@@ -45,7 +45,7 @@ export class LoginPage extends React.Component {
 
 	render() {
 		if (this.props.customProps.user) {
-			return <Redirect to="/"/>;
+			return <Redirect to={ this.props.location.state.prevPage }/>;
 		}
 		return <DefaultLayout 
 				{ ...this.props }
