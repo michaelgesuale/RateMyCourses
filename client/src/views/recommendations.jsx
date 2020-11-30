@@ -13,12 +13,14 @@ export class RecommendationsPage extends React.Component {
 		}
 	}
 
-	componentDidMount() { 
-		fetch(`http://localhost:3000/api/recommendations/${this.props.customProps.user.email}`)
-			.then(response => response.json())
-			.then(courses => {
-				this.setState({ recommendedCourses: courses })
-			}).catch(error => {console.error(error)});
+	componentDidMount() {
+        if (this.props.customProps.user.email){
+            fetch(`http://localhost:3000/api/recommendations/${this.props.customProps.user.email}`)
+                .then(response => response.json())
+                .then(courses => {
+                    this.setState({ recommendedCourses: courses })
+                }).catch(error => {console.error(error)});
+        }
     }
 
     handleLovedClick() {

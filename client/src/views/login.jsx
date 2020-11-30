@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
@@ -45,7 +46,13 @@ export class LoginPage extends React.Component {
 
 	render() {
 		if (this.props.customProps.user) {
-			return <Redirect to={ this.props.location.state.prevPage }/>;
+			return <Redirect to={{
+                pathname: this.props.location.state.prevPage,
+                state: {
+					course_id: Cookies.get('course_id'), // For course page
+					courseName: Cookies.get('courseName') // For course search in catalog
+				}
+            }}/>
 		}
 		return <DefaultLayout 
 				{ ...this.props }

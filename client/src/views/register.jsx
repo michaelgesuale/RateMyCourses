@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
@@ -52,7 +53,7 @@ export class RegisterPage extends React.Component {
 		let isError = false;
 		const whitespaceUsernameError = !/^\S+$/.test(this.state.username);
 		this.setState({ showWhiteSpaceUsernameError: whitespaceUsernameError });
-		isError = isError || whitespaceUsernameError;
+		isError = whitespaceUsernameError;
 		
 		const confirmPasswordMismatch = this.state.password !== this.state.confirmPassword;
 		this.setState({ showConfirmPasswordError: confirmPasswordMismatch });
@@ -81,7 +82,13 @@ export class RegisterPage extends React.Component {
 
 	render() {
 		if (this.props.customProps.user) {
-			return <Redirect to="/"/>;
+			return <Redirect to={{
+                pathname: this.props.location.state.prevPage,
+                state: {
+					course_id: Cookies.get('course_id'), // For course page
+					courseName: Cookies.get('courseName') // For course search in catalog
+				}
+            }}/>
 		}
 		return <DefaultLayout 
 				{ ...this.props }

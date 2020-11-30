@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import { DefaultLayout } from '../layouts/default';
 import { LabelRating } from './../components/labelRating';
@@ -82,6 +83,7 @@ export class CoursePage extends React.Component {
     }
 
 	componentDidMount() {
+        Cookies.set('course_id', this.props.location.state.course_id);
         this.updateCourseInfo();
         this.displayLiked();
     }

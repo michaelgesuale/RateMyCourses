@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { DefaultLayout } from '../layouts/default';
 import { Courses } from './../components/courses';
 import { Filters } from './../components/filters';
@@ -26,8 +27,14 @@ export class CatalogPage extends React.Component {
 
 	componentDidMount() {
 		const locationState = this.props.location.state
-		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
-			: 'http://localhost:3000/api/courses'
+		let apiToFetch;
+		if (locationState && locationState.courseName){
+			Cookies.set('courseName', locationState.courseName)
+			apiToFetch = `http://localhost:3000/api/search/${locationState.courseName}`;
+		} else{
+			Cookies.remove('courseName');
+			apiToFetch = 'http://localhost:3000/api/courses';
+		}
 		fetch(apiToFetch)
 			.then(response => response.json())
 			.then(data => {
@@ -40,8 +47,14 @@ export class CatalogPage extends React.Component {
 		if (prevProps.location.state === locationState) {
 			return
 		}
-		const apiToFetch = locationState ? `http://localhost:3000/api/search/${locationState.courseName}` 
-			: 'http://localhost:3000/api/courses'
+		let apiToFetch;
+		if (locationState && locationState.courseName){
+			Cookies.set('courseName', locationState.courseName)
+			apiToFetch = `http://localhost:3000/api/search/${locationState.courseName}`;
+		} else {
+			Cookies.remove('courseName');
+			apiToFetch = 'http://localhost:3000/api/courses';
+		}
 		fetch(apiToFetch)
 			.then(response => response.json())
 			.then(data => {this.setState({ courses: data })

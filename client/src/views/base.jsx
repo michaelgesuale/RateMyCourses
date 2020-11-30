@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { HomePage } from './home';
 import { CatalogPage } from './catalog';
 import { CoursePage } from './course';
@@ -11,28 +12,24 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 export class Base extends React.Component {
 
-	constructor(props) {
-        super(props);
-        this.state = {
-            user: undefined
-        }
-    }
-
     handleLogin(user_data) {
         const user = {
             email: user_data.email,
             name: user_data.username,
         }
-        this.setState({ user });
+        Cookies.set('user', user, { expires: 1 / 144 }); // Expires in 10 minutes
+        this.forceUpdate();
     }
 
     handleLogout() {
-        this.setState({ user: undefined });
+        Cookies.remove('user');
+        this.forceUpdate();
     }
     
     render() {
+        const cookieUser = Cookies.get('user');
         const customProps = {
-            user: this.state.user,
+            user: cookieUser ? JSON.parse(cookieUser) : undefined,
             handleLogin: (user_data) => this.handleLogin(user_data),
             handleLogout: () => this.handleLogout()
         }
