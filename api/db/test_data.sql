@@ -1,6 +1,8 @@
 INSERT INTO university(name) VALUES ('University of Toronto');
+INSERT INTO university(name) VALUES ('University of Waterloo');
 
 INSERT INTO campus(name, domain, university) VALUES ('University of Toronto Mississauga', 'mail.utoronto.ca', 1);
+INSERT INTO campus(name, domain, university) VALUES ('University of Waterloo', 'mail.waterloo.ca', 2);
 
 INSERT INTO courses(name, campus, description, year, subject) VALUES ('CSC490', 1, 'This course gives students experience solving a substantial problem that may span several areas of Computer Science. Students will define the scope of the problem, develop a solution plan, produce a working implementation, and present their work using written, oral and (if suitable) video reports. Class time will focus on the project, but may include some lectures. The class will be small and highly interactive. Topics, themes and required preparation will vary by instructor.', 4, 'Computer Science');
 INSERT INTO courses(name, campus, description, year, subject) VALUES ('CHM110', 1, 'Matter and its transformations are studied at the macroscopic level. Topics include stoichiometry, phases of matter, equilibria, thermodynamics and electrochemistry.', 1, 'Chemistry');
@@ -29,6 +31,8 @@ INSERT INTO courses(name, campus, description, year, subject) VALUES ('MAT102', 
 
 INSERT INTO courses(name, campus, description, year, subject) VALUES ('CHM201', 1, 'This course is intended for humanities and social science students who wish to gain knowledge of the science behind our well-being that may help them to make personal, social and political decisions in their future. Chemistry will be taught on a need-to-know basis in order to consider some contemporary applications. The course will focus on three themes in the realm of human health: nutrition for the prevention of disease, diagnostic tests for the detection of disease and drug discovery for the treatment of disease.', 2, 'Chemistry');
 
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('CS135 ', 2, 'An introduction to the fundamentals of computer science through the application of elementary programming patterns in the functional style of programming. Syntax and semantics of a functional programming language. Tracing via substitution. Design, testing, and documentation. Linear and nonlinear data structures. Recursive data definitions. Abstraction and encapsulation. Generative and structural recursion. Historical context.', 1, 'Computer Science');
+INSERT INTO courses(name, campus, description, year, subject) VALUES ('CS341 ', 2, 'The study of efficient algorithms and effective algorithm design techniques. Program design with emphasis on pragmatic and mathematical aspects of program efficiency. Topics include divide and conquer algorithms, recurrences, greedy algorithms, dynamic programming, graph search and backtrack, problems without algorithms, NP-completeness and its implications.', 3, 'Computer Science');
 
 INSERT INTO users(email, username, password) VALUES ('test@mail.utoronto.ca', 'Sam', '123456');
 INSERT INTO users(email, username, password) VALUES ('test1@mail.utoronto.ca', 'Clover', '123456');
