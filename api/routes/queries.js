@@ -41,6 +41,7 @@ const getLikedCoursesByUser = `
 	FROM courses, campus, likes 
 	WHERE likes.user_email = $1
 	AND likes.course_id = courses.course_id
+	AND courses.campus = campus.camp_id
 	ORDER BY name DESC;
 `
 const hasUserLikedCourse = `
